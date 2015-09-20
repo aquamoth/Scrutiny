@@ -1,0 +1,8 @@
+﻿@model List<string>
+@{
+    Layout = "_TestLayout";
+}
+@foreach (var script in Model)
+{
+    @Html.Raw("<script src=\"" + script + "\"></script>");
+}

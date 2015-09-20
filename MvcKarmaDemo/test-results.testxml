@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<Tests>
+  <Test>
+    <Name>Index html looks ok (Chrome 45.0.2454 (Windows 8.1 0.0.0))</Name>
+    <DisplayName>Index html looks ok (Chrome 45.0.2454 (Windows 8.1 0.0.0))</DisplayName>
+    <Outcome>Failed</Outcome>
+    <ErrorStackTrace>EnsureException: Expected one element to match &apos;.jumbotron h1&apos;, but found 0
+    at QFrame.Me.get (http://localhost:9876/karmaC:/Users/maas/Workspace/Git/MvcKarmaDemo/MvcKarmaDemo/test/quixote.js:1199:9)
+    at Object.&lt;anonymous&gt; (http://localhost:9876/karmaC:/Users/maas/Workspace/Git/MvcKarmaDemo/MvcKarmaDemo/test/home/indexSpec.js:14:26)
+    at http://localhost:9876/karmaC:/Users/maas/Workspace/Git/MvcKarmaDemo/MvcKarmaDemo/test/quixote.js:1315:5
+    at http://localhost:9876/karmaC:/Users/maas/Workspace/Git/MvcKarmaDemo/MvcKarmaDemo/test/quixote.js:1352:11
+    at http://localhost:9876/karmaC:/Users/maas/Workspace/Git/MvcKarmaDemo/MvcKarmaDemo/test/quixote.js:1109:5
+    at loadStylesheet (http://localhost:9876/karmaC:/Users/maas/Workspace/Git/MvcKarmaDemo/MvcKarmaDemo/test/quixote.js:1117:32)
+
+
+</ErrorStackTrace>
+  </Test>
+  <Test>
+    <Name>DrawingArea initializes (Chrome 45.0.2454 (Windows 8.1 0.0.0))</Name>
+    <DisplayName>DrawingArea initializes (Chrome 45.0.2454 (Windows 8.1 0.0.0))</DisplayName>
+    <Outcome>Passed</Outcome>
+  </Test>
+</Tests>

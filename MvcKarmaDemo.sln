@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcKarmaDemo", "MvcKarmaDemo\MvcKarmaDemo.csproj", "{9F070F0F-1A94-4DFA-A70B-DBAFEEF81461}"
 EndProject
@@ -18,6 +18,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configura
 		PublishScripts\Configurations\MvcKarmaDemo-WAWS-dev.json = PublishScripts\Configurations\MvcKarmaDemo-WAWS-dev.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrutiny.Net", "Scrutiny.Net\Scrutiny.Net.csproj", "{3791F528-DF8F-4AB0-A370-D1C0A82670AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrutiny.Net.Test", "Scrutiny.Net.Test\Scrutiny.Net.Test.csproj", "{5813D1E8-FCF4-4666-81AD-878E35DDF789}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpPipelineMockTests", "HttpPipelineMockTests\HttpPipelineMockTests.csproj", "{86E2444C-2F24-4E9D-B2BB-341BA97212B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpPipelineMock", "HttpPipelineMock\HttpPipelineMock.csproj", "{C91119CC-C6CD-4D4E-86C1-92AC1C0905FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +40,22 @@ Global
 		{3533F975-51AF-4752-9169-D196E57857B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3533F975-51AF-4752-9169-D196E57857B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3533F975-51AF-4752-9169-D196E57857B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3791F528-DF8F-4AB0-A370-D1C0A82670AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3791F528-DF8F-4AB0-A370-D1C0A82670AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3791F528-DF8F-4AB0-A370-D1C0A82670AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3791F528-DF8F-4AB0-A370-D1C0A82670AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5813D1E8-FCF4-4666-81AD-878E35DDF789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5813D1E8-FCF4-4666-81AD-878E35DDF789}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5813D1E8-FCF4-4666-81AD-878E35DDF789}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5813D1E8-FCF4-4666-81AD-878E35DDF789}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86E2444C-2F24-4E9D-B2BB-341BA97212B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86E2444C-2F24-4E9D-B2BB-341BA97212B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86E2444C-2F24-4E9D-B2BB-341BA97212B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86E2444C-2F24-4E9D-B2BB-341BA97212B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C91119CC-C6CD-4D4E-86C1-92AC1C0905FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C91119CC-C6CD-4D4E-86C1-92AC1C0905FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C91119CC-C6CD-4D4E-86C1-92AC1C0905FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C91119CC-C6CD-4D4E-86C1-92AC1C0905FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

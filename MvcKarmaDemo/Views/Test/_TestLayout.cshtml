@@ -1,0 +1,61 @@
+﻿@using System.Web.Optimization
+@*@using My.Web.Controllers*@
+
+<!DOCTYPE html>
+<html data-ng-app="app.main">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jasmine Tests</title>
+    @*<img src="~/Content/jasmine/jasmine_favicon.png" />*@
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/thirdparty")*@
+    <link href="~/Content/jasmine/jasmine.css" rel="stylesheet" />
+    <script src="~/Scripts/jasmine/jasmine.js"></script>
+    <script src="~/Scripts/jasmine/jasmine-html.js"></script>
+@*    <script src="~/Scripts/angular-mocks.js"></script>*@
+  @*  <script src="~/test/common/helpers/testHelper.js"></script>*@
+
+@*    @Scripts.Render("~/app/modules")*@
+    @*<script type="text/javascript">
+        // this creates global modules that will be used by other modules
+        // to access some global variables stored in globals module.  We cannot use type script here.
+        angular.module('app.globalsModule', []).factory('globalsService', function () {
+            var globals = {};
+            globals.baseUrl = '@(Url.Content(@"~/"))';
+            globals.version = '@(typeof(HomeController).Assembly.GetName().Version.ToString())';
+            globals.webApiBaseUrl = '@(Url.Content(@"~/api"))';
+            return globals;
+        });
+    </script>*@
+    @RenderBody()
+</head>
+<body>
+    Test Runner
+</body>
+
+</html>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var jasmineEnv = jasmine.getEnv();
+        jasmineEnv.updateInterval = 1000;
+
+        var htmlReporter = new jasmine.HtmlReporter();
+
+        jasmineEnv.addReporter(htmlReporter);
+
+        jasmineEnv.specFilter = function (spec) {
+            return htmlReporter.specFilter(spec);
+        };
+
+        jasmineEnv.execute();
+    });
+    (function () {
+
+
+    })();
+</script>
