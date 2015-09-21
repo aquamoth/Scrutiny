@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Scrutiny.Controllers
 {
-	class Controller
+	public class Controller
 	{
 		public Controller()
 		{

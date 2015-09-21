@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 
@@ -7,7 +8,7 @@ namespace Scrutiny
 {
 	class Router
 	{
-		internal string Route(string path, System.Collections.Specialized.NameValueCollection nameValueCollection)
+		internal string Route(string path, NameValueCollection parameters)
 		{
 #warning Execute() should return an ActionResult instead, like Mvc.Net does
 			var parts = ControllerActionParts.FromPath(path);
@@ -15,9 +16,9 @@ namespace Scrutiny
 			switch (parts.Controller.ToLowerInvariant())
 			{
 				case "home":
-					return routeHome(parts);
-				case "signalr":
-					return routeSignalR(parts);
+					return routeHome(parts, parameters);
+				case "rpc":
+					return routeRpc(parts, parameters);
 				default:
 					return File(path);
 			}
@@ -30,7 +31,7 @@ namespace Scrutiny
 			return content;
 		}
 
-		private string routeHome(ControllerActionParts parts)
+		private string routeHome(ControllerActionParts parts, NameValueCollection parameters)
 		{
 			var controller = new Controllers.HomeController();
 			switch (parts.Action)
@@ -42,12 +43,19 @@ namespace Scrutiny
 			}
 		}
 
-		private string routeSignalR(ControllerActionParts parts)
+		private string routeRpc(ControllerActionParts parts, NameValueCollection parameters)
 		{
+			var controller = new Scrutiny.Controllers.RpcController();
 			switch (parts.Action.ToLower())
 			{
-				case "hubs":
-					throw new NotImplementedException();
+				case "register":
+					return controller.Register();
+				case "poll":
+					//TODO: Verify and set SessionId
+					//TODO: Consider setting a session cookie on first request if not already set or timed out on the server
+					//var id = parts.Value[0];
+					var id = parameters.Get("id");
+					return controller.Poll(id);
 				default:
 					throw new NotSupportedException();
 			}
