@@ -13,9 +13,14 @@ namespace Scrutiny
 			string template;
 			var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			using (var stream = assembly.GetManifestResourceStream(name))
-			using (var streamReader = new System.IO.StreamReader(stream))
 			{
-				template = streamReader.ReadToEnd();
+				if (stream == null)
+					throw new System.IO.FileNotFoundException("The requested resource was not found on the server.", name);
+
+				using (var streamReader = new System.IO.StreamReader(stream))
+				{
+					template = streamReader.ReadToEnd();
+				}
 			}
 			return template;
 		}

@@ -12,10 +12,12 @@ namespace Scrutiny
 #warning Execute() should return an ActionResult instead, like Mvc.Net does
 			var parts = ControllerActionParts.FromPath(path);
 
-			switch (parts.Controller)
+			switch (parts.Controller.ToLowerInvariant())
 			{
-				case "Home":
+				case "home":
 					return routeHome(parts);
+				case "signalr":
+					return routeSignalR(parts);
 				default:
 					return File(path);
 			}
@@ -35,6 +37,17 @@ namespace Scrutiny
 			{
 				case "Index":
 					return controller.Index();
+				default:
+					throw new NotSupportedException();
+			}
+		}
+
+		private string routeSignalR(ControllerActionParts parts)
+		{
+			switch (parts.Action.ToLower())
+			{
+				case "hubs":
+					throw new NotImplementedException();
 				default:
 					throw new NotSupportedException();
 			}

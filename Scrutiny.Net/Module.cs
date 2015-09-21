@@ -28,7 +28,7 @@ namespace Scrutiny
 		void context_BeginRequest(object sender, EventArgs e)
 		{
 			var context = System.Web.HttpContext.Current;
-			if (context.Request.Path.StartsWith(_path))
+			if (context.Request.Path.StartsWith(_path, StringComparison.OrdinalIgnoreCase))
 			{
 				var action = context.Request.Path.Substring(_path.Length);
 				if (action.StartsWith("/"))
