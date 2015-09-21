@@ -14,6 +14,8 @@ namespace Scrutiny
 
 		internal static ControllerActionParts FromPath(string path)
 		{
+			if (path.StartsWith("/"))
+				path = path.Substring(1);
 			var pathParts = path.Split('/');
 
 			var parts = new ControllerActionParts();

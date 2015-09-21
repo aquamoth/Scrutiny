@@ -17,8 +17,15 @@ namespace Scrutiny
 				case "Home":
 					return routeHome(parts);
 				default:
-					throw new NotSupportedException();
+					return File(path);
 			}
+		}
+
+		private string File(string path)
+		{
+			var resourceName = string.Format("Scrutiny.{0}", path.Replace("/", "."));
+			var content = Resources.GetString(resourceName);
+			return content;
 		}
 
 		private string routeHome(ControllerActionParts parts)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RazorEngine.Templating;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,28 +46,17 @@ namespace Scrutiny.Controllers
 		protected string View(string viewName, object model)
 		{
 			var resourceName = string.Format("Scrutiny.Views.{0}.{1}.cshtml", this.Name, viewName);
-			var template = readResource(resourceName);
+			var template = Resources.GetString(resourceName);
 
 			var cacheName = string.Format("{0}/{1}", this.Name, viewName);
 			var viewBag = new RazorEngine.Templating.DynamicViewBag(this.ViewBag);
+			//var modelType = model == null ? null : model.GetType();
 			var templatingService = new RazorEngine.Templating.TemplateService();
-
 			var result = templatingService.Parse(template, model, viewBag, cacheName);
 			return result;
 		}
 
 		#endregion View
 
-		internal string readResource(string resourceName)
-		{
-			string template;
-			var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-			using (var stream = assembly.GetManifestResourceStream(resourceName))
-			using (var streamReader = new System.IO.StreamReader(stream))
-			{
-				template = streamReader.ReadToEnd();
-			}
-			return template;
-		}
 	}
 }

@@ -31,6 +31,10 @@ namespace Scrutiny
 			if (context.Request.Path.StartsWith(_path))
 			{
 				var action = context.Request.Path.Substring(_path.Length);
+				if (action.StartsWith("/"))
+				{
+					action = action.Substring(1);
+				}
 				var router = new Router();
 				var result = router.Route(action, context.Request.Params);
 				if (result != null)
