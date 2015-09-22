@@ -15,7 +15,7 @@ namespace Scrutiny
 			using (var stream = assembly.GetManifestResourceStream(name))
 			{
 				if (stream == null)
-					throw new System.IO.FileNotFoundException("The requested resource was not found on the server.", name);
+					throw new System.IO.FileNotFoundException(string.Format("The resource '{0}' was not found on the server.", name), name);
 
 				using (var streamReader = new System.IO.StreamReader(stream))
 				{
