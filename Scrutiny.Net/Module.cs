@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.Web.Caching;
 
 namespace Scrutiny
 {
@@ -17,6 +18,7 @@ namespace Scrutiny
 			_moduleUrl = ConfigurationManager.AppSettings["Scrutiny:Url"] ?? "/Scrutiny";
 			_router = new Routers.Router();
 			registerRoutes(_router);
+			registerIOServer();
 		}
 
 		public void Init(System.Web.HttpApplication context)
@@ -55,6 +57,36 @@ namespace Scrutiny
 			router.Register<Routers.HomeRouter>("home");
 			router.Register<Routers.RpcRouter>("rpc");
 		}
+
+		private void registerIOServer()
+		{
+			var server = new WebIO.Net.IOServer();
+			server.ClientConnected += server_ClientConnected;
+
+			var cacheKey = "WebIO.Net.Server";
+			System.Web.HttpContext.Current.Cache.Add(cacheKey, server,
+				null,
+				Cache.NoAbsoluteExpiration,
+				Cache.NoSlidingExpiration,
+				CacheItemPriority.NotRemovable,
+				registerIOServer_CacheItemRemoved);
+		}
+
+		void server_ClientConnected(object sender, EventArgs e)
+		{
+			//TODO: Verify and set SessionId
+			//TODO: Consider setting a session cookie on first request if not already set or timed out on the server
+			throw new NotImplementedException();
+		}
+
+		private void registerIOServer_CacheItemRemoved(string key, object value, CacheItemRemovedReason reason)
+		{
+#warning Do we need to handle IO Server bunked from cache?
+			throw new NotImplementedException("The entire IO Server was bunked from cache!");
+		}
+
+
+
 
 		private string urlFrom(string path)
 		{
