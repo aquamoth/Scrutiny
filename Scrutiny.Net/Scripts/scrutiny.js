@@ -8,15 +8,28 @@
             $('#title').text('Scrutiny - started');
         }
 
-        function onResponse(commands) {
-            console.log('RPC got response');
-            debugger;
-            console.log(commands);
-        }
-
         function onDisconnected() {
             $('#banner').removeClass('online').addClass('offline');
             $('#title').text('Scrutiny - stopped');
+        }
+
+        function onResponse(commands) {
+            $.each(commands, function () {
+                switch (this.Name) {
+                    case 'Clients': onClientsUpdate(this.Data); break;
+                    default:
+                        console.error('Unsupported command: ' + this.Name);
+                        console.log(this.Data);
+                        break;
+                }
+            });
+        }
+
+        function onClientsUpdate(data) {
+            var html = data.map(function (browser) {
+                return '<li>' + browser + '</li>';
+            });
+            $('#browsers').html(html);
         }
     });
 
