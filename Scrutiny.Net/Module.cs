@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Web.Caching;
+using System.Web.Mvc;
 
 namespace Scrutiny
 {
@@ -72,11 +73,14 @@ namespace Scrutiny
 				registerIOServer_CacheItemRemoved);
 		}
 
-		void server_ClientConnected(object sender, EventArgs e)
+		void server_ClientConnected(object sender, WebIO.Net.ClientConnectedEventArgs e)
 		{
-			//TODO: Verify and set SessionId
+			var server = sender as WebIO.Net.IOServer;
+			e.Client.Browser = System.Web.HttpContext.Current.Request.Browser.Browser;
+
+			var browsers = server.Clients.Select(c => c.Browser).ToArray();
+			server.SendToAll("Clients", browsers);
 			//TODO: Consider setting a session cookie on first request if not already set or timed out on the server
-			throw new NotImplementedException();
 		}
 
 		private void registerIOServer_CacheItemRemoved(string key, object value, CacheItemRemovedReason reason)

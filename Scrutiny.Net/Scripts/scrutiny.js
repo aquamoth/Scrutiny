@@ -1,18 +1,22 @@
 ﻿(function(){
 
     $(function () {
-        console.log('Starting');
-        window.rpc.run(onStarted, onResponse, onStopped);
+        window.rpc.run(onConnected, onResponse, onDisconnected);
 
-
-        function onStarted() {
-            console.log('RPC started');
+        function onConnected() {
+            $('#banner').removeClass('offline').addClass('online');
+            $('#title').text('Scrutiny - started');
         }
-        function onResponse() {
+
+        function onResponse(commands) {
             console.log('RPC got response');
+            debugger;
+            console.log(commands);
         }
-        function onStopped() {
-            console.log('RPC stopped');
+
+        function onDisconnected() {
+            $('#banner').removeClass('online').addClass('offline');
+            $('#title').text('Scrutiny - stopped');
         }
     });
 

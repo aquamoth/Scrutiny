@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 
 namespace WebIO.Net
 {
@@ -12,34 +13,30 @@ namespace WebIO.Net
 #warning Poll() should be async!
 		public string Poll(string id)
 		{
-			Client client;
-			if (!string.IsNullOrEmpty(id))
-			{
-				client = FindClient(id);
-			}
+			var client = string.IsNullOrEmpty(id)
+				? RegisterNewClient()
+				: FindClient(id);
+
+			var commands = FlushCommandQueue(client).ToArray();
+
+			if (commands.Any())
+				return Json.Encode(new { id = client.Id, commands = commands });
 			else
-			{
-				client = RegisterNewClient();
-				
-				//TODO: Check if we can upgrade to WebSockets
-				RegisterClientAsLongPollingQuery(client);
-				
-				var clientConnectedEventArgs = new ClientConnectedEventArgs(client);
-				OnClientConnected(clientConnectedEventArgs);
-			}
-
-			var response = FlushMessageQueue(client);
-
-
-			throw new NotImplementedException();
+				return Json.Encode(new { id = client.Id });
 		}
 
-		protected virtual object FlushMessageQueue(Client client)
+		protected virtual IEnumerable<Command> FlushCommandQueue(Client client)
 		{
-			//TODO: Poll the message queue for the client
 			//TODO: Wait for the request timeout
-			//TODO: Return the id + messages from the queue, if any
-			throw new NotImplementedException();
+			if (client.CommandQueue.IsEmpty)
+				System.Threading.Thread.Sleep(5000);
+#warning 5s timeout is just a test. Should also be async!
+
+			Command command;
+			while(client.CommandQueue.TryDequeue(out command))
+			{
+				yield return command;
+			}
 		}
 
 		protected virtual Client RegisterNewClient()
@@ -58,6 +55,13 @@ namespace WebIO.Net
 				}
 				throw new ApplicationException(message.ToString());
 			}
+
+			//TODO: Check if we can upgrade to WebSockets
+			RegisterClientAsLongPollingQuery(client);
+
+			var clientConnectedEventArgs = new ClientConnectedEventArgs(client);
+			OnClientConnected(clientConnectedEventArgs);
+
 			return client;
 		}
 
@@ -67,9 +71,12 @@ namespace WebIO.Net
 				throw new ArgumentException("Not a valid connection id!");
 			return _clients[id];
 		}
+
+		public IEnumerable<Client> Clients { get { return _clients.Values; } }
 		readonly ConcurrentDictionary<string, Client> _clients = new ConcurrentDictionary<string, Client>();
 #warning _clients should probably be replaced by Cache-items, since that automatically would support disconnection cleanup
 #warning Let sliding timeouts == client disconnected
+
 
 		/// <summary>
 		/// Creates a new Client object. 
@@ -84,11 +91,15 @@ namespace WebIO.Net
 
 		protected virtual void RegisterClientAsLongPollingQuery(Client client)
 		{
-			client.Id = Guid.NewGuid().ToString().Replace("-", "");
-			//TODO: Do we need to store changes somehow?
+			bool clientIdIsUnique;
+			do
+			{
+				client.Id = Guid.NewGuid().ToString().Replace("-", "");
+				clientIdIsUnique = _clients.TryAdd(client.Id, client);
+			} while (!clientIdIsUnique);
 		}
 
-		public event EventHandler ClientConnected;
+		public event EventHandler<ClientConnectedEventArgs> ClientConnected;
 		protected virtual void OnClientConnected(ClientConnectedEventArgs e)
 		{
 			if (ClientConnected != null)
@@ -97,12 +108,21 @@ namespace WebIO.Net
 			}
 		}
 
-		public event EventHandler ClientConnecting;
-		private void OnClientConnecting(EventArgs e)
+		public event EventHandler<ClientConnectingEventArgs> ClientConnecting;
+		private void OnClientConnecting(ClientConnectingEventArgs e)
 		{
 			if (ClientConnecting != null)
 			{
 				ClientConnecting(this, e);
+			}
+		}
+
+		public void SendToAll(string p, string[] browsers)
+		{
+			var command = new Command(p, browsers);
+			foreach (var client in Clients)
+			{
+				client.CommandQueue.Enqueue(command);
 			}
 		}
 	}
