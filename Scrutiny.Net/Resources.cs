@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Threading.Tasks;
 
 namespace Scrutiny
@@ -10,19 +7,27 @@ namespace Scrutiny
 	{
 		public static string GetString(string name)
 		{
-			string template;
-			var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-			using (var stream = assembly.GetManifestResourceStream(name))
+			using (var streamReader = createResourceStreamReader(name))
 			{
-				if (stream == null)
-					throw new System.IO.FileNotFoundException(string.Format("The resource '{0}' was not found on the server.", name), name);
-
-				using (var streamReader = new System.IO.StreamReader(stream))
-				{
-					template = streamReader.ReadToEnd();
-				}
+				return streamReader.ReadToEnd();
 			}
-			return template;
+		}
+
+		public static async Task<string> GetStringAsync(string name)
+		{
+			using (var streamReader = createResourceStreamReader(name))
+			{
+				return await streamReader.ReadToEndAsync();
+			}
+		}
+
+		static StreamReader createResourceStreamReader(string name)
+		{
+			var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+			var stream = assembly.GetManifestResourceStream(name);
+			if (stream == null)
+				throw new FileNotFoundException(string.Format("The resource '{0}' was not found on the server.", name), name);
+			return new StreamReader(stream);
 		}
 	}
 }

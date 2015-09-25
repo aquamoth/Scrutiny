@@ -14,7 +14,7 @@ namespace Scrutiny.Routers
 			switch (parts.Action)
 			{
 				case "Index":
-					//TODO: Write dummy await here?!
+					//TODO: Rewrite as async?
 					return controller.Index();
 				default:
 					throw new NotSupportedException();

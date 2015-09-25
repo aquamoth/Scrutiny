@@ -11,8 +11,7 @@ namespace Scrutiny.Routers
 		public async Task<string> Route(ControllerActionParts parts, System.Collections.Specialized.NameValueCollection parameters)
 		{
 			var resourceName = string.Format("Scrutiny.{0}", parts.OriginalPath.Replace("/", "."));
-			var content = Resources.GetString(resourceName);
-			//TODO: Write dummy await here?!
+			var content = await Resources.GetStringAsync(resourceName);
 			return content;
 		}
 	}
