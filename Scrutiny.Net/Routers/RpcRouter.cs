@@ -8,14 +8,14 @@ namespace Scrutiny.Routers
 {
 	class RpcRouter : IRouter
 	{
-		public string Route(ControllerActionParts parts, System.Collections.Specialized.NameValueCollection parameters)
+		public async Task<string> Route(ControllerActionParts parts, System.Collections.Specialized.NameValueCollection parameters)
 		{
 			var controller = new Scrutiny.Controllers.RpcController();
 			switch (parts.Action.ToLower())
 			{
 				case "poll":
 					var id = parameters.Get("id");
-					return controller.Poll(id);
+					return await controller.Poll(id);
 				default:
 					throw new NotSupportedException();
 			}

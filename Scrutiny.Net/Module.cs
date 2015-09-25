@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Web.Caching;
 using System.Web.Mvc;
+using System.Web;
 
 namespace Scrutiny
 {
@@ -24,20 +25,46 @@ namespace Scrutiny
 
 		public void Init(System.Web.HttpApplication context)
 		{
-			context.BeginRequest += context_BeginRequest;
+			//See: http://brockallen.com/2013/07/27/implementing-async-http-modules-in-asp-net-using-tpls-task-api/
+			context.AddOnBeginRequestAsync(onBegin, onEnd);
 		}
 
 		public void Dispose()
 		{
 		}
 
-		void context_BeginRequest(object sender, EventArgs e)
+		IAsyncResult onBegin(object sender, EventArgs e, AsyncCallback cb, object extraData)
+		{
+			var tcs = new TaskCompletionSource<object>(extraData);
+			//HttpContext.Current
+			DoAsyncWork(sender as HttpContext).ContinueWith(t =>
+			{
+				if (t.IsFaulted)
+				{
+					tcs.SetException(t.Exception.InnerExceptions);
+				}
+				else
+				{
+					tcs.SetResult(null);
+				}
+				if (cb != null) cb(tcs.Task);
+			});
+			return tcs.Task;
+		}
+
+		void onEnd(IAsyncResult ar)
+		{
+			Task t = (Task)ar;
+			t.Wait();
+		}
+
+		async Task DoAsyncWork(HttpContext sender)
 		{
 			var context = System.Web.HttpContext.Current;
 			if (context.Request.Path.StartsWith(_moduleUrl, StringComparison.OrdinalIgnoreCase))
 			{
 				var url = urlFrom(context.Request.Path);
-				var result = _router.Route(url, context.Request.Params);
+				var result = await _router.Route(url, context.Request.Params);
 				if (result == null)
 					throw new NotSupportedException("Scrutiny.Net does not support the requested path: " + context.Request.Path);
 

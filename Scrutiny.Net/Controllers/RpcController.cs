@@ -9,11 +9,11 @@ namespace Scrutiny.Controllers
 {
 	public class RpcController : Controller
 	{
-		public string Poll(string id)
+		public async Task<string> Poll(string id)
 		{
 			var cacheKey = "WebIO.Net.Server";
 			var server = (WebIO.Net.IOServer)Context.Cache.Get(cacheKey);
-			return server.Poll(id);
+			return await server.Poll(id);
 		}
 	}
 }

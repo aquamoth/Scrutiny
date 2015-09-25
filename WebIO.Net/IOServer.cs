@@ -4,20 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Helpers;
 
 namespace WebIO.Net
 {
 	public class IOServer
 	{
-#warning Poll() should be async!
-		public string Poll(string id)
+		public async Task<string> Poll(string id)
 		{
 			var client = string.IsNullOrEmpty(id)
 				? RegisterNewClient()
 				: FindClient(id);
 
-			var commands = FlushCommandQueue(client).ToArray();
+			var commands = await FlushCommandQueue(client);
 
 			if (commands.Any())
 				return Json.Encode(new { id = client.Id, commands = commands });
@@ -25,18 +25,26 @@ namespace WebIO.Net
 				return Json.Encode(new { id = client.Id });
 		}
 
-		protected virtual IEnumerable<Command> FlushCommandQueue(Client client)
+		protected virtual async Task<Command[]> FlushCommandQueue(Client client)
 		{
-			//TODO: Wait for the request timeout
-			if (client.CommandQueue.IsEmpty)
-				System.Threading.Thread.Sleep(5000);
-#warning 5s timeout is just a test. Should also be async!
+			var response = HttpContext.Current.Response;
+			while (response.IsClientConnected && client.CommandQueue.IsEmpty)
+			{
+				await Task.Delay(200);
+			}
 
+			//TODO: Is the IsClientConnected test even useful here?
+			if (!response.IsClientConnected)
+				throw new ApplicationException("Client is disconnected!");
+
+			var commands = new List<Command>();
 			Command command;
 			while(client.CommandQueue.TryDequeue(out command))
 			{
-				yield return command;
+				commands.Add(command);
 			}
+
+			return commands.ToArray();
 		}
 
 		protected virtual Client RegisterNewClient()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Scrutiny.Routers
 {
@@ -16,12 +17,12 @@ namespace Scrutiny.Routers
 			routers.Add(controllerName, new T());
 		}
 
-		public virtual string Route(string url, NameValueCollection parameters)
+		public virtual async Task<string> Route(string url, NameValueCollection parameters)
 		{
 #warning Execute() should return an ActionResult instead, like Mvc.Net does
 			var parts = ControllerActionParts.FromPath(url);
 			var router = selectRouter(parts.Controller);
-			return router.Route(parts, parameters);
+			return await router.Route(parts, parameters);
 		}
 
 		private IRouter selectRouter(string controllerName)

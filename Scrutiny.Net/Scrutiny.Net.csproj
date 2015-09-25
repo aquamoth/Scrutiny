@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncModule.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="ControllerActionParts.cs" />
     <Compile Include="Controllers\HomeController.cs" />
