@@ -23,7 +23,7 @@ namespace Scrutiny
 			registerIOServer();
 		}
 
-		protected override async Task DoAsyncWork(HttpContext context)
+		protected override async Task OnBeginRequestAsync(HttpContext context)
 		{
 			if (context.Request.Path.StartsWith(_moduleUrl, StringComparison.OrdinalIgnoreCase))
 			{

@@ -12,17 +12,17 @@ namespace Scrutiny
 	{
 		public void Init(System.Web.HttpApplication context)
 		{
-			context.AddOnBeginRequestAsync(onBegin, onEnd);
+			context.AddOnBeginRequestAsync(onBeginRequestBegin, onBeginRequestEnd);
 		}
 
 		public void Dispose()
 		{
 		}
 
-		IAsyncResult onBegin(object sender, EventArgs e, AsyncCallback cb, object extraData)
+		IAsyncResult onBeginRequestBegin(object sender, EventArgs e, AsyncCallback cb, object extraData)
 		{
 			var tcs = new TaskCompletionSource<object>(extraData);
-			DoAsyncWork(HttpContext.Current).ContinueWith(t =>
+			OnBeginRequestAsync(HttpContext.Current).ContinueWith(t =>
 			{
 				if (t.IsFaulted)
 				{
@@ -37,13 +37,16 @@ namespace Scrutiny
 			return tcs.Task;
 		}
 
-		void onEnd(IAsyncResult ar)
+		void onBeginRequestEnd(IAsyncResult ar)
 		{
 			Task t = (Task)ar;
 			t.Wait();
 		}
 
-		protected abstract Task DoAsyncWork(HttpContext contexts);
+		protected virtual async Task OnBeginRequestAsync(HttpContext contexts)
+		{
+			await Task.Yield();
+		}
 
 	}
 }
