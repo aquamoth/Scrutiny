@@ -33,9 +33,11 @@ namespace WebIO.Net
 				await Task.Delay(200);
 			}
 
-			//TODO: Is the IsClientConnected test even useful here?
 			if (!response.IsClientConnected)
-				throw new ApplicationException("Client is disconnected!");
+			{
+				DisconnectClient(client);
+				throw new ApplicationException("Client has disconnected!");
+			}
 
 			var commands = new List<Command>();
 			Command command;
@@ -73,6 +75,17 @@ namespace WebIO.Net
 			return client;
 		}
 
+		protected virtual void DisconnectClient(Client client)
+		{
+			//TODO: If this can release the polling in FlushCommandQueue(), this command can also be used by the server to bunk clients
+			Client removedClient;
+			if (_clients.TryRemove(client.Id, out removedClient))
+			{
+				var clientDisconnectedEventArgs = new ClientDisconnectedEventArgs(client);
+				OnClientDisconnected(clientDisconnectedEventArgs);
+			}
+		}
+
 		public virtual Client FindClient(string id)
 		{
 			if (!_clients.ContainsKey(id))
@@ -107,14 +120,7 @@ namespace WebIO.Net
 			} while (!clientIdIsUnique);
 		}
 
-		public event EventHandler<ClientConnectedEventArgs> ClientConnected;
-		protected virtual void OnClientConnected(ClientConnectedEventArgs e)
-		{
-			if (ClientConnected != null)
-			{
-				ClientConnected(this, e);
-			}
-		}
+		#region Public Events
 
 		public event EventHandler<ClientConnectingEventArgs> ClientConnecting;
 		private void OnClientConnecting(ClientConnectingEventArgs e)
@@ -124,6 +130,26 @@ namespace WebIO.Net
 				ClientConnecting(this, e);
 			}
 		}
+
+		public event EventHandler<ClientConnectedEventArgs> ClientConnected;
+		protected virtual void OnClientConnected(ClientConnectedEventArgs e)
+		{
+			if (ClientConnected != null)
+			{
+				ClientConnected(this, e);
+			}
+		}
+
+		public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
+		protected virtual void OnClientDisconnected(ClientDisconnectedEventArgs e)
+		{
+			if (ClientDisconnected != null)
+			{
+				ClientDisconnected(this, e);
+			}
+		}
+
+		#endregion Public Events
 
 		public void SendToAll(string p, string[] browsers)
 		{

@@ -53,6 +53,7 @@ namespace Scrutiny
 			//TODO: Abstract the IOServer with events into its own stateful class
 			var server = new WebIO.Net.IOServer();
 			server.ClientConnected += server_ClientConnected;
+			server.ClientDisconnected += server_ClientDisconnected;
 
 			var cacheKey = "WebIO.Net.Server";
 			System.Web.HttpContext.Current.Cache.Add(cacheKey, server,
@@ -72,6 +73,14 @@ namespace Scrutiny
 			var browsers = server.Clients.Select(c => c.Browser).ToArray();
 			server.SendToAll("Clients", browsers);
 			//TODO: Consider setting a session cookie on first request if not already set or timed out on the server
+		}
+
+		void server_ClientDisconnected(object sender, WebIO.Net.ClientDisconnectedEventArgs e)
+		{
+			//This is business logic and should be moved elsewhere
+			var server = sender as WebIO.Net.IOServer;
+			var browsers = server.Clients.Select(c => c.Browser).ToArray();
+			server.SendToAll("Clients", browsers);
 		}
 
 		private void registerIOServer_CacheItemRemoved(string key, object value, CacheItemRemovedReason reason)
