@@ -10,7 +10,7 @@ using System.Web;
 
 namespace Scrutiny
 {
-	public class Module : System.Web.IHttpModule
+	public class Module : AsyncHttpModule
     {
 		readonly Scrutiny.Routers.Router _router;
 		readonly string _moduleUrl;
@@ -23,44 +23,8 @@ namespace Scrutiny
 			registerIOServer();
 		}
 
-		public void Init(System.Web.HttpApplication context)
+		protected override async Task DoAsyncWork(HttpContext context)
 		{
-			//See: http://brockallen.com/2013/07/27/implementing-async-http-modules-in-asp-net-using-tpls-task-api/
-			context.AddOnBeginRequestAsync(onBegin, onEnd);
-		}
-
-		public void Dispose()
-		{
-		}
-
-		IAsyncResult onBegin(object sender, EventArgs e, AsyncCallback cb, object extraData)
-		{
-			var tcs = new TaskCompletionSource<object>(extraData);
-			//HttpContext.Current
-			DoAsyncWork(sender as HttpContext).ContinueWith(t =>
-			{
-				if (t.IsFaulted)
-				{
-					tcs.SetException(t.Exception.InnerExceptions);
-				}
-				else
-				{
-					tcs.SetResult(null);
-				}
-				if (cb != null) cb(tcs.Task);
-			});
-			return tcs.Task;
-		}
-
-		void onEnd(IAsyncResult ar)
-		{
-			Task t = (Task)ar;
-			t.Wait();
-		}
-
-		async Task DoAsyncWork(HttpContext sender)
-		{
-			var context = System.Web.HttpContext.Current;
 			if (context.Request.Path.StartsWith(_moduleUrl, StringComparison.OrdinalIgnoreCase))
 			{
 				var url = urlFrom(context.Request.Path);
@@ -78,8 +42,6 @@ namespace Scrutiny
 			response.End();
 		}
 
-
-
 		private void registerRoutes(Scrutiny.Routers.Router router)
 		{
 			router.Register<Routers.HomeRouter>("home");
@@ -88,6 +50,7 @@ namespace Scrutiny
 
 		private void registerIOServer()
 		{
+			//TODO: Abstract the IOServer with events into its own stateful class
 			var server = new WebIO.Net.IOServer();
 			server.ClientConnected += server_ClientConnected;
 
@@ -102,6 +65,7 @@ namespace Scrutiny
 
 		void server_ClientConnected(object sender, WebIO.Net.ClientConnectedEventArgs e)
 		{
+			//This is business logic and should be moved elsewhere
 			var server = sender as WebIO.Net.IOServer;
 			e.Client.Browser = System.Web.HttpContext.Current.Request.Browser.Browser;
 
