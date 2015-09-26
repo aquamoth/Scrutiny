@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Configuration;
-using System.Web.Caching;
-using System.Web.Mvc;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Caching;
 
 namespace Scrutiny
 {
 	public class Module : AsyncHttpModule
     {
+		public const string IOSERVER_CACHE_KEY = "WebIO.Net.Server";
+
 		readonly Scrutiny.Routers.Router _router;
 		readonly string _moduleUrl;
 
@@ -50,37 +49,13 @@ namespace Scrutiny
 
 		private void registerIOServer()
 		{
-			//TODO: Abstract the IOServer with events into its own stateful class
-			var server = new WebIO.Net.IOServer();
-			server.ClientConnected += server_ClientConnected;
-			server.ClientDisconnected += server_ClientDisconnected;
-
-			var cacheKey = "WebIO.Net.Server";
-			System.Web.HttpContext.Current.Cache.Add(cacheKey, server,
+			var server = new State.ScrutinyServer();
+			System.Web.HttpContext.Current.Cache.Add(IOSERVER_CACHE_KEY, server,
 				null,
 				Cache.NoAbsoluteExpiration,
 				Cache.NoSlidingExpiration,
 				CacheItemPriority.NotRemovable,
 				registerIOServer_CacheItemRemoved);
-		}
-
-		void server_ClientConnected(object sender, WebIO.Net.ClientConnectedEventArgs e)
-		{
-			//This is business logic and should be moved elsewhere
-			var server = sender as WebIO.Net.IOServer;
-			e.Client.Browser = System.Web.HttpContext.Current.Request.Browser.Browser;
-
-			var browsers = server.Clients.Select(c => c.Browser).ToArray();
-			server.SendToAll("Clients", browsers);
-			//TODO: Consider setting a session cookie on first request if not already set or timed out on the server
-		}
-
-		void server_ClientDisconnected(object sender, WebIO.Net.ClientDisconnectedEventArgs e)
-		{
-			//This is business logic and should be moved elsewhere
-			var server = sender as WebIO.Net.IOServer;
-			var browsers = server.Clients.Select(c => c.Browser).ToArray();
-			server.SendToAll("Clients", browsers);
 		}
 
 		private void registerIOServer_CacheItemRemoved(string key, object value, CacheItemRemovedReason reason)

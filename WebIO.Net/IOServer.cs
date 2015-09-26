@@ -123,7 +123,7 @@ namespace WebIO.Net
 		#region Public Events
 
 		public event EventHandler<ClientConnectingEventArgs> ClientConnecting;
-		private void OnClientConnecting(ClientConnectingEventArgs e)
+		protected virtual void OnClientConnecting(ClientConnectingEventArgs e)
 		{
 			if (ClientConnecting != null)
 			{

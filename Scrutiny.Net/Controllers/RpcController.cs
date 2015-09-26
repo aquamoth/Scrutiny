@@ -11,8 +11,7 @@ namespace Scrutiny.Controllers
 	{
 		public async Task<string> Poll(string id)
 		{
-			var cacheKey = "WebIO.Net.Server";
-			var server = (WebIO.Net.IOServer)Context.Cache.Get(cacheKey);
+			var server = (WebIO.Net.IOServer)Context.Cache.Get(Module.IOSERVER_CACHE_KEY);
 			return await server.Poll(id);
 		}
 	}
