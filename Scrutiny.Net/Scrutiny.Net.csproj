@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncModule.cs" />
+    <Compile Include="Controllers\ContextController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="ControllerActionParts.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.cs" />
     <Compile Include="Routers\FallbackRouter.cs" />
+    <Compile Include="Routers\ContextRouter.cs" />
     <Compile Include="Routers\HomeRouter.cs" />
     <Compile Include="Routers\Router.cs" />
     <Compile Include="Routers\IRouter.cs" />
@@ -71,6 +73,9 @@
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Home\Index.cshtml" />
     <EmbeddedResource Include="Scripts\jquery-1.10.2.min.map" />
+    <EmbeddedResource Include="Views\Context\Debug.cshtml" />
+    <EmbeddedResource Include="Views\Context\Index-scrutiny.cshtml" />
+    <EmbeddedResource Include="Views\Context\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\rpc.js" />
@@ -88,7 +93,23 @@
       <Name>WebIO.Net</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\karma_mocha\lib\adapter.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\mocha\mocha.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\expect.js\index.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\karma_commonjs\client\commonjs_bridge.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\karma.js" />
+    <Content Include="Scripts\r.js" />
+    <Content Include="Scripts\require.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

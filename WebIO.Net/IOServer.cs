@@ -151,9 +151,18 @@ namespace WebIO.Net
 
 		#endregion Public Events
 
-		public void SendToAll(string p, string[] browsers)
+		public void SendTo(Client client, string p, object data)
 		{
-			var command = new Command(p, browsers);
+			if (!Clients.Contains(client))
+				throw new ArgumentException("Client is not registered.");
+
+			var command = new Command(p, data);
+			client.CommandQueue.Enqueue(command);
+		}
+
+		public void SendToAll(string p, object data)
+		{
+			var command = new Command(p, data);
 			foreach (var client in Clients)
 			{
 				client.CommandQueue.Enqueue(command);

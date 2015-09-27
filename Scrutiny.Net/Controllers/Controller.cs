@@ -30,12 +30,14 @@ namespace Scrutiny.Controllers
 
 		protected string View()
 		{
-			throw new NotImplementedException();
+			//TODO: Should automatically determine View name from callers function-name
+			return View("Index", null);
 		}
 
 		protected string View(object model)
 		{
-			throw new NotImplementedException();
+			//TODO: Should automatically determine View name from callers function-name
+			return View("Index", model);
 		}
 
 		protected string View(string viewName)

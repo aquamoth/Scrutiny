@@ -12,12 +12,22 @@ namespace Scrutiny.State
 		{
 			base.OnClientConnected(e);
 
-			//This is business logic and should be moved elsewhere
-			e.Client.Browser = System.Web.HttpContext.Current.Request.Browser.Browser;
+			//TODO: Format as: Chrome 45.0.2454 (Windows 8.1)
+			var request = System.Web.HttpContext.Current.Request;
+			e.Client.Browser =
+				string.Format("{0} {1} ({2})",
+					request.Browser.Browser,
+					request.Browser.Version,
+					"TODO: Unknown"
+				);
 
 			var browsers = this.Clients.Select(c => c.Browser).ToArray();
 			this.SendToAll("Clients", browsers);
-			//TODO: Consider setting a session cookie on first request if not already set or timed out on the server
+
+
+
+#warning Just testing code!
+			this.SendTo(e.Client, "Load", "/Scrutiny/Context");
 		}
 
 		protected override void OnClientDisconnected(WebIO.Net.ClientDisconnectedEventArgs e)

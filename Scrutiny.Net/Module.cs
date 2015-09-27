@@ -44,6 +44,7 @@ namespace Scrutiny
 		private void registerRoutes(Scrutiny.Routers.Router router)
 		{
 			router.Register<Routers.HomeRouter>("home");
+			router.Register<Routers.ContextRouter>("context");
 			router.Register<Routers.RpcRouter>("rpc");
 		}
 
