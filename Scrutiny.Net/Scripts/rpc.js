@@ -74,8 +74,8 @@
             });
 
             function onEmitSuccess(response, status, xhr) {
-                console.log((new Date).toLocaleTimeString() + ' emit succeeded');
-                console.log(response);
+                //console.log((new Date).toLocaleTimeString() + ' emit succeeded');
+                //console.log(response);
             }
 
             function onEmitError(xhr, status, error) {
@@ -145,17 +145,16 @@
             }
 
             function onPollError(xhr, status, error) {
-                debugger;
                 console.warn((new Date).toLocaleTimeString() + ' poll error for ' + manager.socket.id);
                 console.warn('Server responded with status ' + status);
                 console.warn(error);
-                _autoRestartPolling = false;
+                manager._autoRestartPolling = false;
                 console.warn("Disabled automatic restarting polling since there was a real server error.");
 
                 debugger;
                 if (manager.socket.id) {
                     this.socket = null;
-                    sendEvent.call(this, 'disconnect');
+                    sendEvent.call(manager, 'disconnect');
                 }
             }
         }
