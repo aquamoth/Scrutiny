@@ -2,8 +2,8 @@
     1: [function (require, module, exports) {
         module.exports = {
             VERSION: '0.12.24',
-            KARMA_URL_ROOT: '/',
-            CONTEXT_URL: 'context.html'
+            KARMA_URL_ROOT: '/Scrutiny/',
+            CONTEXT_URL: '/Scrutiny/Context'
         };
 
     }, {}], 2: [function (require, module, exports) {

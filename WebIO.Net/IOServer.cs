@@ -11,11 +11,15 @@ namespace WebIO.Net
 {
 	public class IOServer
 	{
+		public string Connect()
+		{
+			var client = RegisterNewClient();
+			return Json.Encode(new { id = client.Id });
+		}
+
 		public async Task<string> Poll(string id)
 		{
-			var client = string.IsNullOrEmpty(id)
-				? RegisterNewClient()
-				: FindClient(id);
+			var client = FindClient(id);
 
 			var commands = await FlushCommandQueue(client);
 
@@ -151,22 +155,36 @@ namespace WebIO.Net
 
 		#endregion Public Events
 
-		public void SendTo(Client client, string p, object data)
+		public void SendTo(Client client, string name, object args)
 		{
 			if (!Clients.Contains(client))
 				throw new ArgumentException("Client is not registered.");
 
-			var command = new Command(p, data);
+			var command = new Command(name, args);
 			client.CommandQueue.Enqueue(command);
 		}
 
-		public void SendToAll(string p, object data)
+		public void SendToAll(string name, object args)
 		{
-			var command = new Command(p, data);
+			var command = new Command(name, args);
 			foreach (var client in Clients)
 			{
 				client.CommandQueue.Enqueue(command);
 			}
 		}
+
+		protected string JsonEncode(object value)
+		{
+			return System.Web.Helpers.Json.Encode(value);
+		}
+		//protected object JsonDecode(string value)
+		//{
+		//	return System.Web.Helpers.Json.Decode(value);
+		//}
+		protected T JsonDecode<T>(string value) where T : class
+		{
+			return System.Web.Helpers.Json.Decode<T>(value);
+		}
+
 	}
 }

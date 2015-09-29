@@ -1,98 +1,176 @@
 ﻿(function () {
     "use strict";
-    var exports = window.rpc = {};
+    var io = window.io = {};
 
-    var _connectionId = null;
-    var _onConnected, _onDisconnected;
-    var _autoRestartPolling = false;
-
-    var callbacks = [];
-
-
-    exports.run = function (onConnected, onDisconnected) {
-        _onConnected = isFunction(onConnected) ? onConnected : null;
-        _onDisconnected = isFunction(onDisconnected) ? onDisconnected : null;
-
-        _autoRestartPolling = true;
-        poll();
+    io.connect = function (url, options) {
+        var manager = new Manager(url, options);
+        manager.connect();
+        return manager;
     };
 
-    exports.on = function (name, callback) {
-        var itemsForName = callbacks.filter(function (item) { return item.name === name; });
-        var list;
-        if (itemsForName.length === 0)
-        {
-            list = [];
-            callbacks.push({ name: name, items: list });
-        }
-        else {
-            debugger;
-            list = itemsForName[0].items;
-        }
-        list.push(callback);
-        return this;
-    }
 
-    exports.emit = function (message, args) {
-        //TODO: Implement emit()!
-        console.error("RPC does not yet support emitting data.");
-        console.log(message);
-        console.log(args);
-    };
+    function Manager(url, options) {
 
-    function poll() {
-        console.log((new Date).toLocaleTimeString() + ' poll started for ' + _connectionId);
-        $.ajax({
-            url: '/scrutiny/rpc/poll',
-            type: 'post',
-            data: { id: _connectionId },
-            dataType: 'json',
-            success: onPollSuccess,
-            error: onPollError,
-            complete: function () {
-                if (_autoRestartPolling === true) {
-                    poll();
+        this._options = options || {};
+        this._url = url + '/' + (options.resource || ''); //TODO: This is probably NOT accoring to Socket.IO, where I think resource is an internal namespace for multiplexing
+
+        this._autoRestartPolling = false;
+        this._callbacks = [];
+
+        this.socket = null;
+
+
+
+
+
+        this.connect = function () {
+            this._autoRestartPolling = true;
+            poll.call(this);
+        };
+
+        this.disconnect = function () {
+            if (this.socket !== null) {
+                this.socket._autoRestartPolling = false;
+            }
+        }
+
+        this.on = function (eventName, callback) {
+            if (!isFunction(callback)) {
+                debugger;
+                throw "Listener for '" + eventName + "' must be a function!";
+            }
+
+            console.log('RPC Manager registers listener for: ' + eventName);
+            var callbacksForEvent = this._callbacks.filter(function (event) { return event.name === eventName; });
+            var list;
+            if (callbacksForEvent.length === 0)
+            {
+                list = [];
+                this._callbacks.push({ name: eventName, callbacks: list });
+            }
+            else {
+                list = callbacksForEvent[0].callbacks;
+            }
+            list.push(callback);
+            return this;
+        }
+
+        this.emit = function (message, args) {
+            var manager = this;
+
+            if (manager.socket === null)
+                throw "No socket is currently connected!";
+
+            var data = { id: manager.socket.id, message: message, args: args };
+            console.log('Emitting:');
+            console.log(data);
+            $.ajax({
+                url: manager._url,
+                type: 'post',
+                data: data,
+                dataType: 'json',
+                success: onEmitSuccess,
+                error: onEmitError
+            });
+
+            function onEmitSuccess(response, status, xhr) {
+                console.log((new Date).toLocaleTimeString() + ' emit succeeded');
+                console.log(response);
+            }
+
+            function onEmitError(xhr, status, error) {
+                debugger;
+                console.warn((new Date).toLocaleTimeString() + ' emit error');
+                console.warn('Server responded with status ' + status);
+                console.warn(error);
+
+                manager.disconnect();
+                console.warn("Disabled automatic restarting polling since there was a real server error.");
+            }
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function poll() {
+            var manager = this;
+
+            var data = null;
+            if (manager.socket === null){
+                console.log((new Date).toLocaleTimeString() + ' poll initiated');
+            }
+            else
+            {
+                console.log((new Date).toLocaleTimeString() + ' poll continued for ' + manager.socket.id);
+                data = { id: manager.socket.id };
+            }
+
+            $.ajax({
+                url: manager._url,
+                type: 'post',
+                data: data,
+                dataType: 'json',
+                success: onPollSuccess,
+                error: onPollError,
+                complete: function () {
+                    if (manager._autoRestartPolling === true) {
+                        poll.call(manager);
+                    }
+                }
+            });
+
+            function onPollSuccess(response, status, xhr) {
+                console.log(response);
+
+                if (manager.socket === null) {
+                    manager.socket = { id: response.id, transport: { name: 'http' } };
+                    console.log((new Date).toLocaleTimeString() + ' new id = ' + manager.socket.id);
+                    sendEvent.call(manager, 'connect', null);
+                }
+
+                if (response.commands) {
+                    $.each(response.commands, function (i, command) {
+                        sendEvent.call(manager, command.Name, command.Args);
+                    });
                 }
             }
-        });
-    }
 
-    function onPollSuccess(response, status, xhr) {
-        console.log(response);
+            function onPollError(xhr, status, error) {
+                debugger;
+                console.warn((new Date).toLocaleTimeString() + ' poll error for ' + manager.socket.id);
+                console.warn('Server responded with status ' + status);
+                console.warn(error);
+                _autoRestartPolling = false;
+                console.warn("Disabled automatic restarting polling since there was a real server error.");
 
-        if (_connectionId === null) {
-            _connectionId = response.id;
-            console.log((new Date).toLocaleTimeString() + ' new id = ' + _connectionId);
-            if (_onConnected !== null)
-                _onConnected(_connectionId);
+                debugger;
+                if (manager.socket.id) {
+                    this.socket = null;
+                    sendEvent.call(this, 'disconnect');
+                }
+            }
         }
 
-        if (response.commands) {
-            onResponse(response.commands);
-        }
-    }
-
-    function onPollError(xhr, status, error) {
-        console.warn((new Date).toLocaleTimeString() + ' poll error for ' + _connectionId);
-        console.warn('Server responded with status ' + status);
-        console.warn(error);
-        _autoRestartPolling = false;
-        console.warn("Disabled automatic restarting polling since there was a real server error.");
-        if (_onDisconnected !== null)
-            _onDisconnected();
-    }
-
-    function onResponse(commands) {
-        $.each(commands, function (i, command) {
-            var fn = callbacks
-                .filter(function (item) { return item.name === command.Name; })
-                .map(function (item) { return item.items; });
-            var fn = [].concat.apply([], fn); //Flattens array of arrays
-            $.each(fn, function (j, callback) {
-                callback(command.Data);
+        function sendEvent(eventName, args) {
+            var eventCallbacks = this._callbacks
+                .filter(function (event) { return event.name === eventName; })
+                .map(function (event) { return event.callbacks; });
+            var eventCallbacks = [].concat.apply([], eventCallbacks); //Flattens array of arrays
+            $.each(eventCallbacks, function (j, callback) {
+                callback(args);
             });
-        });
-    }
+        }
+    };
+
 
     function isFunction(f) { return typeof (f) === 'function'; }
 
