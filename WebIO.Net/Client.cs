@@ -12,6 +12,8 @@ namespace WebIO.Net
 
 		//Properties below should be Scrutiny-specific!
 		public string Browser { get; set; }
+		public bool IsReady { get; set; }
+		public int TotalCount { get; set; }
 
 		public Client()
 		{

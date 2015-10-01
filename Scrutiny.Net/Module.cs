@@ -26,12 +26,18 @@ namespace Scrutiny
 		{
 			if (context.Request.Path.StartsWith(_moduleUrl, StringComparison.OrdinalIgnoreCase))
 			{
-				var url = urlFrom(context.Request.Path);
-				var result = await _router.Route(url, context.Request.Params);
-				if (result == null)
-					throw new NotSupportedException("Scrutiny.Net does not support the requested path: " + context.Request.Path);
-
-				writeTo(context.Response, result);
+				try
+				{
+					var url = urlFrom(context.Request.Path);
+					var result = await _router.Route(url);
+					if (result == null)
+						throw new NotSupportedException("Scrutiny.Net does not support the requested path: " + context.Request.Path);
+					writeTo(context.Response, result);
+				}
+				catch (Exception)
+				{
+					throw;
+				}
 			}
 		}
 

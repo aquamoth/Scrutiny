@@ -2,6 +2,8 @@
     "use strict";
     var io = window.io = {};
 
+    //window.console.clear = function () { console.log('Console clear is DEBUG suppressed.');}
+
     io.connect = function (url, options) {
         var manager = new Manager(url, options);
         manager.connect();
@@ -36,11 +38,10 @@
 
         this.on = function (eventName, callback) {
             if (!isFunction(callback)) {
-                debugger;
                 throw "Listener for '" + eventName + "' must be a function!";
             }
 
-            console.log('RPC Manager registers listener for: ' + eventName);
+            //console.log('RPC Manager registers listener for: ' + eventName);
             var callbacksForEvent = this._callbacks.filter(function (event) { return event.name === eventName; });
             var list;
             if (callbacksForEvent.length === 0)
@@ -55,6 +56,8 @@
             return this;
         }
 
+        this.emitQueue = [];
+        this.emitIsRunning = false;
         this.emit = function (message, args) {
             var manager = this;
 
@@ -62,16 +65,38 @@
                 throw "No socket is currently connected!";
 
             var data = { id: manager.socket.id, message: message, args: args };
-            console.log('Emitting:');
-            console.log(data);
-            $.ajax({
-                url: manager._url,
-                type: 'post',
-                data: data,
-                dataType: 'json',
-                success: onEmitSuccess,
-                error: onEmitError
-            });
+            manager.emitQueue.push(data);
+            //console.log('Emit queue has length: ' + manager.emitQueue.length);
+            tryRunEmitter();
+
+            function tryRunEmitter() {
+                if (!manager.emitIsRunning) {
+                    manager.emitIsRunning = true;
+                    runEmitter();
+                }
+            }
+
+            function runEmitter() {
+                if (manager.emitQueue.length === 0) {
+                    manager.emitIsRunning = false;
+                    return;
+                }
+
+                var data = manager.emitQueue.shift();
+                console.log((new Date).toLocaleTimeString() + ' emitting "' + data.message + '":');
+                console.log(data.args);
+                $.ajax({
+                    url: manager._url,
+                    type: 'post',
+                    data: data,
+                    dataType: 'json',
+                    success: onEmitSuccess,
+                    error: onEmitError,
+                    complete: function () {
+                        runEmitter();
+                    }
+                });
+            }
 
             function onEmitSuccess(response, status, xhr) {
                 //console.log((new Date).toLocaleTimeString() + ' emit succeeded');
@@ -79,9 +104,8 @@
             }
 
             function onEmitError(xhr, status, error) {
-                debugger;
-                console.warn((new Date).toLocaleTimeString() + ' emit error');
-                console.warn('Server responded with status ' + status);
+                console.warn((new Date).toLocaleTimeString() + ' emit "' + data.message + '" returned an error.');
+                console.warn('Server responded with status: ' + status);
                 console.warn(error);
 
                 manager.disconnect();
@@ -149,9 +173,8 @@
                 console.warn('Server responded with status ' + status);
                 console.warn(error);
                 manager._autoRestartPolling = false;
-                console.warn("Disabled automatic restarting polling since there was a real server error.");
+                console.warn("Disconnected since there was a server error.");
 
-                debugger;
                 if (manager.socket.id) {
                     this.socket = null;
                     sendEvent.call(manager, 'disconnect');

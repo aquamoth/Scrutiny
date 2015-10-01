@@ -40,7 +40,7 @@ namespace WebIO.Net
 			if (!response.IsClientConnected)
 			{
 				DisconnectClient(client);
-				throw new ApplicationException("Client has disconnected!");
+				return new Command[0];
 			}
 
 			var commands = new List<Command>();

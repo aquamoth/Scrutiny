@@ -8,7 +8,7 @@ namespace Scrutiny.Routers
 {
 	class FallbackRouter : IRouter
 	{
-		public async Task<string> Route(ControllerActionParts parts, System.Collections.Specialized.NameValueCollection parameters)
+		public async Task<string> Route(ControllerActionParts parts)
 		{
 			var path = parts.OriginalPath;
 			path = path.Replace("/", ".");

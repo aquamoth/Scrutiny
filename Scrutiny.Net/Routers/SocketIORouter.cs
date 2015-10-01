@@ -23,7 +23,7 @@ namespace Scrutiny.Routers
 			}
 		}
 
-		public async Task<string> Route(ControllerActionParts parts, System.Collections.Specialized.NameValueCollection parameters)
+		public async Task<string> Route(ControllerActionParts parts)
 		{
 			var context = System.Web.HttpContext.Current;
 			var server = (ScrutinyServer)context.Cache.Get(Module.IOSERVER_CACHE_KEY);
@@ -52,17 +52,29 @@ namespace Scrutiny.Routers
 				switch (message)
 				{
 					case "register":
-						server.Register(id, form);
+						var name = form["args[name]"];
+						server.Register(id, name);
 						return "{}";
 
-					case "error":
-#warning Client sending error has not been implemented properly
-						System.Diagnostics.Trace.TraceError("Client error: " + form["args"]);
+					case "start":
+						var total = int.Parse(form["args[total]"]);
+						server.Start(id, total);
+						return "{}";
+
+					case "result":
+						var model = new ResultModel
+						{
+							//TODO:
+						};
+						server.Result(id, model);
 						return "{}";
 
 					case "complete":
-#warning Client sending complete has not been implemented properly
-						System.Diagnostics.Trace.TraceError("Client complete: Not implemented");
+						server.Complete(id);
+						return "{}";
+
+					case "error":
+						server.Error(id, form);
 						return "{}";
 
 					default:

@@ -7,6 +7,26 @@ using System.Threading.Tasks;
 
 namespace Scrutiny.State
 {
+	//class ts : System.Web.ModelBinding.IModelBinder
+	//{
+
+	//	public bool BindModel(System.Web.ModelBinding.ModelBindingExecutionContext modelBindingExecutionContext, System.Web.ModelBinding.ModelBindingContext bindingContext)
+	//	{
+	//		bindingContext.ModelMetadata.
+	//		return true;
+	//	}
+	//}
+//SAMPLE USAGE:
+			//var modelState = new System.Web.ModelBinding.ModelStateDictionary();
+			//var contextBase = new System.Web.HttpContextWrapper(System.Web.HttpContext.Current);
+			//var bindingExecutionContext = new System.Web.ModelBinding.ModelBindingExecutionContext(contextBase, modelState);
+			//var bindingContext = new System.Web.ModelBinding.ModelBindingContext();
+			//var binder = new ts();
+			//var success = binder.BindModel(bindingExecutionContext, bindingContext);
+			//var model = bindingContext.Model;
+
+
+
 	class RegisterModel
 	{
 		public string Browser { get; set; }
@@ -18,22 +38,9 @@ namespace Scrutiny.State
 		{
 			base.OnClientConnected(e);
 
-//			//TODO: Format as: Chrome 45.0.2454 (Windows 8.1)
-//			var request = System.Web.HttpContext.Current.Request;
-//			e.Client.Browser =
-//				string.Format("{0} {1} ({2})",
-//					request.Browser.Browser,
-//					request.Browser.Version,
-//					"TODO: Unknown"
-//				);
-
-//			broadcastClientsList();
-
-
-
-//#warning Just testing code!
-//			this.SendTo(e.Client, "execute", "/Scrutiny/Context");
 		}
+
+
 
 		protected override void OnClientDisconnected(WebIO.Net.ClientDisconnectedEventArgs e)
 		{
@@ -41,17 +48,63 @@ namespace Scrutiny.State
 			broadcastClientsList();
 		}
 
-		public void Register(string id, NameValueCollection arguments)
+		public void Register(string id, string name)
 		{
 			var client = FindClient(id);
-			client.Browser = arguments["args[name]"];
+			if (!string.IsNullOrEmpty(client.Browser))
+				throw new ApplicationException("Client tried to register itself multiple times.");
+
+			if (string.IsNullOrWhiteSpace(name))
+				throw new ArgumentException("Client tried to register as an undefined browser.", "name");
+
+			client.Browser = name;
+			client.IsReady = true;
+	
 			broadcastClientsList();
 
 
 
 
-#warning Just testing code!
-			this.SendTo(client, "execute", "{}");
+#warning Just testing code! Tests should be started from external server-calls
+			var cfg = new {
+				frameworks = new[] { "mocha", "commonjs", "expect" },
+				preprocessors = new string[] { },
+				reporters = new[] { "dots"},
+			};
+			this.SendTo(client, "execute", cfg);
+		}
+
+		internal void Start(string id, int total)
+		{
+			var client = FindClient(id);
+			client.IsReady = false;
+			client.TotalCount = total;
+			broadcastClientsList();
+		}
+
+		internal void Result(string id, ResultModel model)
+		{
+#warning ScrutinyServer.Result() not implemented correctly
+		}
+
+		internal void Complete(string id)
+		{
+			var client = FindClient(id);
+			client.IsReady = true;
+
+#warning ScrutinyServer.Complete() not implemented correctly
+			broadcastClientsList();
+		}
+
+		internal void Error(string id, NameValueCollection arguments)
+		{
+			var client = FindClient(id);
+			client.IsReady = true;
+
+#warning ScrutinyServer.Error() not implemented correctly
+			System.Diagnostics.Trace.TraceError("Client error: " + arguments["args"]);
+
+			broadcastClientsList();
 		}
 
 
@@ -62,7 +115,6 @@ namespace Scrutiny.State
 				.ToArray();
 			this.SendToAll("info", browsers);
 		}
-
 	}
 
 	class RegisterResponse

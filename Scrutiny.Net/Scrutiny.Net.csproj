@@ -63,10 +63,8 @@
     <Compile Include="Routers\Router.cs" />
     <Compile Include="Routers\IRouter.cs" />
     <Compile Include="Routers\SocketIORouter.cs" />
+    <Compile Include="State\ResultModel.cs" />
     <Compile Include="State\ScrutinyServer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\scrutiny.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -105,9 +103,12 @@
     <EmbeddedResource Include="Scripts\karma_commonjs\client\commonjs_bridge.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\fail_fast.js" />
+    <EmbeddedResource Include="Scripts\_fail_fast_test.js" />
     <EmbeddedResource Include="Scripts\karma.js" />
+    <EmbeddedResource Include="karma.cfg" />
     <Content Include="Scripts\r.js" />
-    <Content Include="Scripts\require.js" />
+    <EmbeddedResource Include="Scripts\require.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
