@@ -36,8 +36,6 @@ namespace Scrutiny.State
 
 		}
 
-
-
 		protected override void OnClientDisconnected(WebIO.Net.ClientDisconnectedEventArgs e)
 		{
 			base.OnClientDisconnected(e);
@@ -49,7 +47,6 @@ namespace Scrutiny.State
 			var client = FindClient(id);
 			if (!string.IsNullOrEmpty(client.Browser))
 				throw new ApplicationException("Client tried to register itself multiple times.");
-
 			if (string.IsNullOrWhiteSpace(model.name))
 				throw new ArgumentException("Client tried to register as an undefined browser.", "name");
 
@@ -57,24 +54,15 @@ namespace Scrutiny.State
 			client.IsReady = true;
 	
 			broadcastClientsList();
-
-
-
-
-#warning Just testing code! Tests should be started from external server-calls
-			var cfg = new {
-				frameworks = new[] { "mocha", "commonjs", "expect" },
-				preprocessors = new string[] { },
-				reporters = new[] { "dots"},
-			};
-			this.SendTo(client, "execute", cfg);
 		}
 
 		internal void Start(string id, StartModel model)
 		{
 			var client = FindClient(id);
 			client.IsReady = false;
+			client.IsRunRequested = false;
 			client.TotalCount = model.total;
+
 			broadcastClientsList();
 		}
 

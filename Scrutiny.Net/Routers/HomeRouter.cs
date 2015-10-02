@@ -16,6 +16,10 @@ namespace Scrutiny.Routers
 				case "Index":
 					//TODO: Rewrite as async?
 					return controller.Index();
+
+				case "Run":
+					return await controller.Run();
+
 				default:
 					throw new NotSupportedException();
 			}

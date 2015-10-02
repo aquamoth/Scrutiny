@@ -43,7 +43,8 @@ namespace Scrutiny
 
 		private static void endResponse(System.Web.HttpResponse response, string responseText, System.Net.HttpStatusCode statusCode = System.Net.HttpStatusCode.OK)
 		{
-			response.StatusCode = (int)statusCode;
+			if (statusCode != System.Net.HttpStatusCode.OK)
+				response.StatusCode = (int)statusCode;
 			response.Write(responseText);
 			response.End();
 		}
