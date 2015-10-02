@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scrutiny.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -27,11 +28,6 @@ namespace Scrutiny.State
 
 
 
-	class RegisterModel
-	{
-		public string Browser { get; set; }
-	}
-
 	class ScrutinyServer : WebIO.Net.IOServer
 	{
 		protected override void OnClientConnected(WebIO.Net.ClientConnectedEventArgs e)
@@ -48,16 +44,16 @@ namespace Scrutiny.State
 			broadcastClientsList();
 		}
 
-		public void Register(string id, string name)
+		public void Register(string id, RegisterModel model)
 		{
 			var client = FindClient(id);
 			if (!string.IsNullOrEmpty(client.Browser))
 				throw new ApplicationException("Client tried to register itself multiple times.");
 
-			if (string.IsNullOrWhiteSpace(name))
+			if (string.IsNullOrWhiteSpace(model.name))
 				throw new ArgumentException("Client tried to register as an undefined browser.", "name");
 
-			client.Browser = name;
+			client.Browser = model.name;
 			client.IsReady = true;
 	
 			broadcastClientsList();
@@ -74,11 +70,11 @@ namespace Scrutiny.State
 			this.SendTo(client, "execute", cfg);
 		}
 
-		internal void Start(string id, int total)
+		internal void Start(string id, StartModel model)
 		{
 			var client = FindClient(id);
 			client.IsReady = false;
-			client.TotalCount = total;
+			client.TotalCount = model.total;
 			broadcastClientsList();
 		}
 
@@ -87,7 +83,7 @@ namespace Scrutiny.State
 #warning ScrutinyServer.Result() not implemented correctly
 		}
 
-		internal void Complete(string id)
+		internal void Complete(string id, CompleteModel model)
 		{
 			var client = FindClient(id);
 			client.IsReady = true;

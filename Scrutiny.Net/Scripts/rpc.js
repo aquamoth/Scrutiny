@@ -31,8 +31,18 @@
         };
 
         this.disconnect = function () {
-            if (this.socket !== null) {
-                this.socket._autoRestartPolling = false;
+            var manager = this;
+            if (manager.socket !== null) {
+                //console.warn("RPC disconnecting.");
+                manager._autoRestartPolling = false;
+                if (manager.socket) {
+                    if (manager.socket.id)
+                        sendEvent.call(manager, 'disconnect');
+                    else {
+                        //TODO: Connect failed event?
+                    }
+                    manager.socket = null;
+                }
             }
         }
 
@@ -104,12 +114,10 @@
             }
 
             function onEmitError(xhr, status, error) {
-                console.warn((new Date).toLocaleTimeString() + ' emit "' + data.message + '" returned an error.');
-                console.warn('Server responded with status: ' + status);
-                console.warn(error);
+                console.error(xhr.responseText);
 
+                console.warn("Disconnecting due to unhandled emit error.");
                 manager.disconnect();
-                console.warn("Disabled automatic restarting polling since there was a real server error.");
             }
         };
 
@@ -129,14 +137,14 @@
             var manager = this;
 
             var data = null;
-            if (manager.socket === null){
-                console.log((new Date).toLocaleTimeString() + ' poll initiated');
-            }
-            else
-            {
-                console.log((new Date).toLocaleTimeString() + ' poll continued for ' + manager.socket.id);
+            if (manager.socket !== null) {
+                //console.log((new Date).toLocaleTimeString() + ' poll continued for ' + manager.socket.id);
                 data = { id: manager.socket.id };
             }
+            //else
+            //{
+            //    console.log((new Date).toLocaleTimeString() + ' poll initiated');
+            //}
 
             $.ajax({
                 url: manager._url,
@@ -153,8 +161,6 @@
             });
 
             function onPollSuccess(response, status, xhr) {
-                console.log(response);
-
                 if (manager.socket === null) {
                     manager.socket = { id: response.id, transport: { name: 'http' } };
                     console.log((new Date).toLocaleTimeString() + ' new id = ' + manager.socket.id);
@@ -169,20 +175,27 @@
             }
 
             function onPollError(xhr, status, error) {
-                console.warn((new Date).toLocaleTimeString() + ' poll error for ' + manager.socket.id);
-                console.warn('Server responded with status ' + status);
-                console.warn(error);
-                manager._autoRestartPolling = false;
-                console.warn("Disconnected since there was a server error.");
+                //console.warn((new Date).toLocaleTimeString() + ' poll error for ' + manager.socket.id);
+                //console.warn('Server responded with status ' + status);
+                //console.warn(error);
+                console.error(xhr.responseText);
 
-                if (manager.socket.id) {
-                    this.socket = null;
-                    sendEvent.call(manager, 'disconnect');
-                }
+                debugger;
+                console.warn("Disconnected since there was an unhandled poll error.");
+                manager.disconnect();
+                //manager._autoRestartPolling = false;
+                //if (manager.socket.id) {
+                //    manager.socket = null;
+                //    sendEvent.call(manager, 'disconnect');
+                //}
             }
         }
 
         function sendEvent(eventName, args) {
+            console.log((new Date).toLocaleTimeString() + ' throwing event "' + eventName + '":');
+            if (args)
+                console.log(args);
+
             var eventCallbacks = this._callbacks
                 .filter(function (event) { return event.name === eventName; })
                 .map(function (event) { return event.callbacks; });

@@ -32,18 +32,19 @@ namespace Scrutiny
 					var result = await _router.Route(url);
 					if (result == null)
 						throw new NotSupportedException("Scrutiny.Net does not support the requested path: " + context.Request.Path);
-					writeTo(context.Response, result);
+					endResponse(context.Response, result);
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
-					throw;
+					endResponse(context.Response, ex.ToString(), System.Net.HttpStatusCode.InternalServerError);
 				}
 			}
 		}
 
-		private static void writeTo(System.Web.HttpResponse response, string result)
+		private static void endResponse(System.Web.HttpResponse response, string responseText, System.Net.HttpStatusCode statusCode = System.Net.HttpStatusCode.OK)
 		{
-			response.Write(result);
+			response.StatusCode = (int)statusCode;
+			response.Write(responseText);
 			response.End();
 		}
 

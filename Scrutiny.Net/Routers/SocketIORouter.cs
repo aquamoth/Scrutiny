@@ -1,4 +1,5 @@
-﻿using Scrutiny.State;
+﻿using Scrutiny.Models;
+using Scrutiny.State;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -10,25 +11,12 @@ namespace Scrutiny.Routers
 {
 	class SocketIORouter : IRouter
 	{
-		private IEnumerable<KeyValuePair<string,string>> enumerate(NameValueCollection collection)
-		{
-			for (int i = 0; i < collection.Count; i++)
-			{
-				if (!string.IsNullOrWhiteSpace(collection[i]))
-				{
-					var key = collection.Keys[i];
-					var value = collection[i];
-					yield return new KeyValuePair<string, string>(key, value);
-				}
-			}
-		}
-
 		public async Task<string> Route(ControllerActionParts parts)
 		{
 			var context = System.Web.HttpContext.Current;
 			var server = (ScrutinyServer)context.Cache.Get(Module.IOSERVER_CACHE_KEY);
 
-			var form = context.Request.Form;
+			var form = context.Request.Unvalidated.Form;
 			var id = form.Get("id");
 			var message = form.Get("message");
 
@@ -51,36 +39,29 @@ namespace Scrutiny.Routers
 				//Emitting command
 				switch (message)
 				{
-					case "register":
-						var name = form["args[name]"];
-						server.Register(id, name);
-						return "{}";
-
-					case "start":
-						var total = int.Parse(form["args[total]"]);
-						server.Start(id, total);
-						return "{}";
-
-					case "result":
-						var model = new ResultModel
-						{
-							//TODO:
-						};
-						server.Result(id, model);
-						return "{}";
-
-					case "complete":
-						server.Complete(id);
-						return "{}";
-
-					case "error":
-						server.Error(id, form);
-						return "{}";
-
+					case "register": server.Register(id, RegisterModel.From(form)); break;
+					case "start": server.Start(id, StartModel.From(form)); break;
+					case "result": server.Result(id, ResultModel.From(form)); break;
+					case "complete": server.Complete(id, CompleteModel.From(form)); break;
+					case "error": server.Error(id, form); break;
 					default:
-						throw new ArgumentException("Not a valid command", "message");
+						throw new ArgumentException(string.Format("'{0}' is not a valid command", message), "message");
 				}
+				return "{}";
 			}
 		}
+
+		//private IEnumerable<KeyValuePair<string, string>> enumerate(NameValueCollection collection)
+		//{
+		//	for (int i = 0; i < collection.Count; i++)
+		//	{
+		//		if (!string.IsNullOrWhiteSpace(collection[i]))
+		//		{
+		//			var key = collection.Keys[i];
+		//			var value = collection[i];
+		//			yield return new KeyValuePair<string, string>(key, value);
+		//		}
+		//	}
+		//}
 	}
 }
