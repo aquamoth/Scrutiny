@@ -78,6 +78,11 @@ namespace Scrutiny.State
 			broadcastClientsList();
 		}
 
+		internal void Info(string id, InfoModel model)
+		{
+#warning ScrutinyServer.Info() not implemented correctly
+		}
+
 		internal void Result(string id, ResultModel model)
 		{
 #warning ScrutinyServer.Result() not implemented correctly

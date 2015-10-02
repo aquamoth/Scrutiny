@@ -41,6 +41,7 @@ namespace Scrutiny.Routers
 				{
 					case "register": server.Register(id, RegisterModel.From(form)); break;
 					case "start": server.Start(id, StartModel.From(form)); break;
+					case "info": server.Info(id, InfoModel.From(form)); break;
 					case "result": server.Result(id, ResultModel.From(form)); break;
 					case "complete": server.Complete(id, CompleteModel.From(form)); break;
 					case "error": server.Error(id, form); break;

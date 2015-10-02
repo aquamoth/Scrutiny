@@ -55,6 +55,7 @@
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="ControllerActionParts.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\InfoModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Models\StartModel.cs" />
     <Compile Include="Module.cs" />

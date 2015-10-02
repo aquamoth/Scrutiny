@@ -175,19 +175,11 @@
             }
 
             function onPollError(xhr, status, error) {
-                //console.warn((new Date).toLocaleTimeString() + ' poll error for ' + manager.socket.id);
-                //console.warn('Server responded with status ' + status);
-                //console.warn(error);
-                console.error(xhr.responseText);
-
-                debugger;
+                //console.error((new Date).toLocaleTimeString() + ' poll returned ' + error);
+                //console.error('Server responded with status ' + status);
+                //console.error(xhr.responseText);
                 console.warn("Disconnected since there was an unhandled poll error.");
                 manager.disconnect();
-                //manager._autoRestartPolling = false;
-                //if (manager.socket.id) {
-                //    manager.socket = null;
-                //    sendEvent.call(manager, 'disconnect');
-                //}
             }
         }
 
