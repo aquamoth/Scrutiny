@@ -90,7 +90,7 @@ namespace WebIO.Net
 			}
 		}
 
-		public virtual Client FindClient(string id)
+		public Client FindClient(string id)
 		{
 			if (!_clients.ContainsKey(id))
 				throw new ArgumentException("Not a valid connection id!");
@@ -110,8 +110,7 @@ namespace WebIO.Net
 		/// <returns></returns>
 		protected virtual Client CreateClient()
 		{
-			var client = new Client();
-			return client;
+			return new Client();
 		}
 
 		protected virtual void RegisterClientAsLongPollingQuery(Client client)

@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebIO.Net;
 
 namespace Scrutiny.State
 {
@@ -42,6 +43,8 @@ namespace Scrutiny.State
 			broadcastClientsList();
 		}
 
+		#region Client emits
+
 		public void Register(string id, RegisterModel model)
 		{
 			var client = FindClient(id);
@@ -73,7 +76,11 @@ namespace Scrutiny.State
 
 		internal void Result(string id, ResultModel model)
 		{
-#warning ScrutinyServer.Result() not implemented correctly
+			var client = FindClient(id);
+			foreach (var item in model.Items)
+			{
+				client.Results.Add(item);
+			}
 		}
 
 		internal void Complete(string id, CompleteModel model)
@@ -96,6 +103,67 @@ namespace Scrutiny.State
 			broadcastClientsList();
 		}
 
+		#endregion Client emits
+
+		#region Server commands
+
+		internal bool Execute(/* cfg? */)
+		{
+			if (this.Clients.Any(x => x.IsRunRequested || !x.IsReady))
+				return false;
+
+			var cfg = new
+			{
+				frameworks = new[] { "mocha", "commonjs", "expect" },
+				preprocessors = new string[] { },
+				reporters = new[] { "dots" },
+			};
+
+			foreach (var client in this.Clients)
+			{
+				client.IsRunRequested = true;
+				client.Results.Clear();
+			}
+			this.SendToAll("execute", cfg);
+
+			return true;
+		}
+
+		#endregion Server commands
+
+
+
+
+		public new IEnumerable<ScrutinyTestClient> Clients
+		{
+			get
+			{
+				return base.Clients.Cast<ScrutinyTestClient>();
+			}
+		}
+		private new ScrutinyTestClient FindClient(string id)
+		{
+			return base.FindClient(id) as ScrutinyTestClient;
+		}
+		protected override Client CreateClient()
+		{
+			var client = new ScrutinyTestClient();
+			client.Results.CollectionChanged += (s, e) =>
+			{
+				if (e.NewItems!=null)
+				{
+					foreach (TestResult result in e.NewItems)
+					{
+						if (!result.success)
+						{
+							//TODO: Add to testrunners queue
+							//ErrorQueue.Add("Failed test found");
+						}
+					}
+				}
+			};
+			return client;
+		}
 
 		private void broadcastClientsList()
 		{

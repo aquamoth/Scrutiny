@@ -18,30 +18,36 @@ namespace Scrutiny.Controllers
 		{
 			var server = (ScrutinyServer)Context.Cache.Get(Module.IOSERVER_CACHE_KEY);
 
-			//TODO: Check if Run() is already in progress before starting another thread!
-
 			Context.Response.Buffer = false;
+			Context.Response.Write(string.Format("<h1>[{0:yyyy-MM-dd HH:mm:ss.fffff}] [DEBUG] config - <small>Loading config (hardcoded for now...)</small></h1>", DateTime.Now));
 
-			Context.Response.Write("<p>Starting testing</p>");
-
-			foreach (var client in server.Clients)
-				client.IsRunRequested = true;
-
-			var cfg = new
+			if (!server.Clients.Any())
 			{
-				frameworks = new[] { "mocha", "commonjs", "expect" },
-				preprocessors = new string[] { },
-				reporters = new[] { "dots" },
-			};
-			server.SendToAll("execute", cfg);
+				throw new ApplicationException("There are no connected clients!");
+			}
 
-			Context.Response.Write("<p>");
+			var isStarted = server.Execute();
+			if (!isStarted)
+			{
+				throw new ApplicationException("Failed to start! Is another test run already in progress?");
+			}
+
+
+
+			//Context.Response.Write("<p>");
 			while (server.Clients.Any(x => x.IsRunRequested || !x.IsReady))
 			{
-				Context.Response.Write(".");
+				//Context.Response.Write(".");
 				await Task.Delay(200);
+
+	//server.Clients.Select(x=>x.)
+			
+			
 			}
-			Context.Response.Write("</p>");
+			//Context.Response.Write("</p>");
+
+
+
 			Context.Response.Write("<p>Test results:</p>");
 
 

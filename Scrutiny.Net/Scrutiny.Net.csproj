@@ -69,6 +69,7 @@
     <Compile Include="Routers\SocketIORouter.cs" />
     <Compile Include="Models\CompleteModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
+    <Compile Include="State\ScrutinyClient.cs" />
     <Compile Include="State\ScrutinyServer.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scrutiny.State;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +8,11 @@ namespace Scrutiny.Models
 {
 	class ResultModel
 	{
-		public ResultModelItem[] Items { get; set; }
+		public TestResult[] Items { get; set; }
 
 		public static ResultModel From(System.Collections.Specialized.NameValueCollection form)
 		{
-			var items = new List<ResultModelItem>();
+			var items = new List<TestResult>();
 			var i = 0;
 			while (form.AllKeys.Contains(string.Format("args[{0}][id]", i)))
 			{
@@ -22,13 +23,15 @@ namespace Scrutiny.Models
 				var time = form[string.Format("args[{0}][time]", i)];
 				var timeInt = time == null ? null : (int?)int.Parse(time);
 
-				var item = new ResultModelItem
+				var skippedBool = bool.Parse(form[string.Format("args[{0}][skipped]", i)]);
+				var successBool = bool.Parse(form[string.Format("args[{0}][success]", i)]);
+				var item = new TestResult
 				{
 					id = form[string.Format("args[{0}][id]", i)],
 					description = form[string.Format("args[{0}][description]", i)],
 					log = logs,
-					skipped = form[string.Format("args[{0}][skipped]", i)],
-					success = form[string.Format("args[{0}][success]", i)],
+					skipped = skippedBool,
+					success = successBool,
 					suite = form[string.Format("args[{0}][suite][]", i)].Split(','),
 					time = timeInt
 				};
@@ -37,16 +40,5 @@ namespace Scrutiny.Models
 			}
 			return new ResultModel { Items = items.ToArray() };
 		}
-	}
-	
-	class ResultModelItem
-	{
-		public string id { get; set; }
-		public string description { get; set; }
-		public string[] log { get; set; }
-		public string[] suite { get; set; }
-		public string success{ get; set; }
-		public string skipped { get; set; }
-		public int? time { get; set; }
 	}
 }

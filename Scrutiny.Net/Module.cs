@@ -43,7 +43,8 @@ namespace Scrutiny
 
 		private static void endResponse(System.Web.HttpResponse response, string responseText, System.Net.HttpStatusCode statusCode = System.Net.HttpStatusCode.OK)
 		{
-			if (statusCode != System.Net.HttpStatusCode.OK)
+#warning Unbuffered responses can probably set status code if NO content has been sent yet?!
+			if (response.Buffer)
 				response.StatusCode = (int)statusCode;
 			response.Write(responseText);
 			response.End();
