@@ -27,7 +27,8 @@ namespace Scrutiny.State
 			if (string.IsNullOrWhiteSpace(model.name))
 				throw new ArgumentException("Client tried to register as an undefined browser.", "name");
 
-			client.Browser = model.name;
+			var request = System.Web.HttpContext.Current.Request;
+			client.Browser = string.Format("{0} {1} ({2})", request.Browser.Browser, request.Browser.Version, request.Browser.Platform);
 			client.IsReady = true;
 	
 			broadcastClientsList();
