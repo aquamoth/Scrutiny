@@ -17,4 +17,10 @@ namespace Scrutiny.Models
 			};
 		}
 	}
+
+	class RegisterResponse
+	{
+		public bool isReady { get; set; }
+		public string name { get; set; }
+	}
 }

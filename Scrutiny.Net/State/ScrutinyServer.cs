@@ -9,34 +9,8 @@ using WebIO.Net;
 
 namespace Scrutiny.State
 {
-	//class ts : System.Web.ModelBinding.IModelBinder
-	//{
-
-	//	public bool BindModel(System.Web.ModelBinding.ModelBindingExecutionContext modelBindingExecutionContext, System.Web.ModelBinding.ModelBindingContext bindingContext)
-	//	{
-	//		bindingContext.ModelMetadata.
-	//		return true;
-	//	}
-	//}
-//SAMPLE USAGE:
-			//var modelState = new System.Web.ModelBinding.ModelStateDictionary();
-			//var contextBase = new System.Web.HttpContextWrapper(System.Web.HttpContext.Current);
-			//var bindingExecutionContext = new System.Web.ModelBinding.ModelBindingExecutionContext(contextBase, modelState);
-			//var bindingContext = new System.Web.ModelBinding.ModelBindingContext();
-			//var binder = new ts();
-			//var success = binder.BindModel(bindingExecutionContext, bindingContext);
-			//var model = bindingContext.Model;
-
-
-
 	class ScrutinyServer : WebIO.Net.IOServer
 	{
-		protected override void OnClientConnected(WebIO.Net.ClientConnectedEventArgs e)
-		{
-			base.OnClientConnected(e);
-
-		}
-
 		protected override void OnClientDisconnected(WebIO.Net.ClientDisconnectedEventArgs e)
 		{
 			base.OnClientDisconnected(e);
@@ -133,7 +107,6 @@ namespace Scrutiny.State
 
 
 
-
 		public new IEnumerable<ScrutinyTestClient> Clients
 		{
 			get
@@ -145,23 +118,10 @@ namespace Scrutiny.State
 		{
 			return base.FindClient(id) as ScrutinyTestClient;
 		}
+		
 		protected override Client CreateClient()
 		{
 			var client = new ScrutinyTestClient();
-			client.Results.CollectionChanged += (s, e) =>
-			{
-				if (e.NewItems!=null)
-				{
-					foreach (TestResult result in e.NewItems)
-					{
-						if (!result.success)
-						{
-							//TODO: Add to testrunners queue
-							//ErrorQueue.Add("Failed test found");
-						}
-					}
-				}
-			};
 			return client;
 		}
 
@@ -174,9 +134,22 @@ namespace Scrutiny.State
 		}
 	}
 
-	class RegisterResponse
-	{
-		public bool isReady { get; set; }
-		public string name { get; set; }
-	}
+
+	//class ts : System.Web.ModelBinding.IModelBinder
+	//{
+
+	//	public bool BindModel(System.Web.ModelBinding.ModelBindingExecutionContext modelBindingExecutionContext, System.Web.ModelBinding.ModelBindingContext bindingContext)
+	//	{
+	//		bindingContext.ModelMetadata.
+	//		return true;
+	//	}
+	//}
+	//SAMPLE USAGE:
+	//var modelState = new System.Web.ModelBinding.ModelStateDictionary();
+	//var contextBase = new System.Web.HttpContextWrapper(System.Web.HttpContext.Current);
+	//var bindingExecutionContext = new System.Web.ModelBinding.ModelBindingExecutionContext(contextBase, modelState);
+	//var bindingContext = new System.Web.ModelBinding.ModelBindingContext();
+	//var binder = new ts();
+	//var success = binder.BindModel(bindingExecutionContext, bindingContext);
+	//var model = bindingContext.Model;
 }
