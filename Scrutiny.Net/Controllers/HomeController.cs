@@ -44,18 +44,22 @@ namespace Scrutiny.Controllers
 						{
 							if (!item.success)
 							{
+								var message = new StringBuilder();
+
 								string template;
-								template = "<p class='error'><span class='browser'>{0}</span> <span class='description'>{1}</span></p>";
-								messageQueue.Enqueue(string.Format(template, client.Browser, item.description));
+								template = "<p class='error'><span class='browser'>{0}</span> <span class='description'>{1}</span></p>\n";
+								message.AppendFormat(template, client.Browser, item.description);
 
 								if (item.log.Length > 0)
 								{
-									template = "<pre class='log'>{0}</pre>";
+									template = "<pre class='log'>{0}</pre>\n";
 									foreach (var logRow in item.log)
 									{
-										messageQueue.Enqueue(string.Format(template, logRow));
+										message.AppendFormat(template, logRow);
 									}
 								}
+
+								messageQueue.Enqueue(message.ToString());
 							}
 						}
 					}
