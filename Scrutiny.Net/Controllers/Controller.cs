@@ -49,12 +49,8 @@ namespace Scrutiny.Controllers
 		{
 			var resourceName = string.Format("Scrutiny.Views.{0}.{1}.cshtml", this.Name, viewName);
 			var template = Resources.GetString(resourceName);
-
-			var cacheName = string.Format("{0}/{1}", this.Name, viewName);
 			var viewBag = new RazorEngine.Templating.DynamicViewBag(this.ViewBag);
-			//var modelType = model == null ? null : model.GetType();
-			var templatingService = new RazorEngine.Templating.TemplateService();
-			var result = templatingService.Parse(template, model, viewBag, cacheName);
+			var result = RazorEngine.Engine.Razor.RunCompile(template, resourceName, null, model, viewBag);
 			return result;
 		}
 
