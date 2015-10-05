@@ -55,12 +55,14 @@
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="ControllerActionParts.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RunController.cs" />
     <Compile Include="Models\ContextModels.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.cs" />
     <Compile Include="Routers\FallbackRouter.cs" />
     <Compile Include="Routers\ContextRouter.cs" />
+    <Compile Include="Routers\RunRouter.cs" />
     <Compile Include="Routers\HomeRouter.cs" />
     <Compile Include="Routers\Router.cs" />
     <Compile Include="Routers\IRouter.cs" />

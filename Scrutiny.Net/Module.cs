@@ -55,6 +55,7 @@ namespace Scrutiny
 		{
 			router.Register<Routers.HomeRouter>("home");
 			router.Register<Routers.ContextRouter>("context");
+			router.Register<Routers.RunRouter>("run");
 			router.Register<Routers.SocketIORouter>("socket.io");
 		}
 
