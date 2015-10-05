@@ -10,7 +10,9 @@ namespace Scrutiny.Models
 	{
 		public class Index
 		{
-			public IEnumerable<string> Files { get; set; }
+			public IEnumerable<string> PreTestFiles { get; set; }
+			public IEnumerable<string> TestFiles { get; set; }
+			public IEnumerable<string> PostTestFiles { get; set; }
 		}
 	}
 }

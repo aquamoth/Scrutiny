@@ -1,4 +1,7 @@
 ﻿@model Scrutiny.Models.ContextModels.Index
+@{
+    var allScripts = Model.PreTestFiles.Union(Model.TestFiles).Union(Model.PostTestFiles);
+}
 <!DOCTYPE html>
 <!--
 This is the execution context.
@@ -16,16 +19,16 @@ Realoaded before every execution run.
          into it. If it is before body, then it fails to find the body and crashes and burns in an epic
          manner. -->
     <script type="text/javascript">
-    // sets window.__karma__ and overrides console and error handling
-    // Use window.opener if this was opened by someone else - in a new window
-    if (window.opener) {
-        window.opener.karma.setupContext(window);
-    } else {
-        window.parent.karma.setupContext(window);
-    }
+        // sets window.__karma__ and overrides console and error handling
+        // Use window.opener if this was opened by someone else - in a new window
+        if (window.opener) {
+            window.opener.karma.setupContext(window);
+        } else {
+            window.parent.karma.setupContext(window);
+        }
 
-    // All served files with the latest timestamps
-    window.__karma__.files = {
+        // All served files with the latest timestamps
+        window.__karma__.files = {
         @*
             '@Raw(string.Join("',\n'", Model.Files.ToArray()))'
             //    '/base/node_modules/karma-expect/node_modules/expect.js/index.js': '0e21a2240f31eb72270c443f4eaa97bbca67db8d',
@@ -48,20 +51,18 @@ Realoaded before every execution run.
             //    '/base/src/client/index.html': '9caf52a9ccff84864815a707159930e82ddc5804',
             //    '/base/node_modules/karma-commonjs/client/commonjs_bridge.js': 'a9a9a23ae5f358ea9e5550f6be96f8d5a615e39c'
         *@
-    };
+        };
     
-    window.__cjs_modules_root__ = '';//'C:\\Users\\maas\\Workspace\\Git\\MvcKarmaDemo\\Scrutiny.Net\\Scripts\\';
-    window.__cjs_module__ = window.__cjs_module__ || {};
-    //window.__cjs_module__["C:\\Users\\maas\\Workspace\\Git\\MvcKarmaDemo\\Scrutiny.Net\\Scripts\\require.js"] = function (require, module, exports, __dirname, __filename) {
-    //    debugger;
-    //};
-
-
+        window.__cjs_modules_root__ = '';//'C:\\Users\\maas\\Workspace\\Git\\MvcKarmaDemo\\Scrutiny.Net\\Scripts\\';
+        window.__cjs_module__ = window.__cjs_module__ || {};
+        //window.__cjs_module__["C:\\Users\\maas\\Workspace\\Git\\MvcKarmaDemo\\Scrutiny.Net\\Scripts\\require.js"] = function (require, module, exports, __dirname, __filename) {
+        //    debugger;
+        //};
     </script>
     <!-- Dynamically "replaced" with <script> tags -->
-    @foreach (var file in Model.Files)
+    @foreach (var url in allScripts)
     {
-        <script type="text/javascript" src="@file"></script>
+        <script type="text/javascript" src="@url"></script>
     }
     @*
         <script type="text/javascript" src="/Scrutiny/Scripts/expect.js/index.js"></script>

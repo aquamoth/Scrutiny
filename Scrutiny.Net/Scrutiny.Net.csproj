@@ -75,8 +75,7 @@
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Home\Index.cshtml" />
     <EmbeddedResource Include="Scripts\jquery-1.10.2.min.map" />
-    <EmbeddedResource Include="Views\Context\Debug.cshtml" />
-    <EmbeddedResource Include="Views\Context\Index-scrutiny.cshtml" />
+    <EmbeddedResource Include="Views\Home\Debug.cshtml" />
     <EmbeddedResource Include="Views\Context\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

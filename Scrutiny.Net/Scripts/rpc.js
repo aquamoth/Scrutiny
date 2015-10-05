@@ -161,6 +161,7 @@
             });
 
             function onPollSuccess(response, status, xhr) {
+                //console.log((new Date).toLocaleTimeString() + ' poll success.');
                 if (manager.socket === null) {
                     manager.socket = { id: response.id, transport: { name: 'http' } };
                     console.log((new Date).toLocaleTimeString() + ' new id = ' + manager.socket.id);
