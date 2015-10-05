@@ -91,7 +91,7 @@ namespace Scrutiny.Controllers
 					Context.Response.Write(string.Format(" <span class='error'>({0} FAILED)</span>", failedCount));
 				}
 				var testTime = client.Results.Sum(x => x.time) / 1000.0;
-				var totalTime = 0;//TODO: Implement
+				var totalTime = client.TestsEndTime.Subtract(client.TestsStartTime).TotalSeconds;
 				Context.Response.Write(string.Format(" ({0:N3} secs / {1:N3} secs)</p>", testTime, totalTime));
 			}
 

@@ -24,6 +24,8 @@ namespace Scrutiny.State
 		public bool IsRunRequested { get; set; }
 		public bool IsReady { get; set; }
 		public int TotalCount { get; set; }
+		public DateTime	TestsStartTime { get; set; }
+		public DateTime TestsEndTime { get; set; }
 		public ObservableCollection<TestResult> Results { get; private set; }
 
 		public ScrutinyTestClient()

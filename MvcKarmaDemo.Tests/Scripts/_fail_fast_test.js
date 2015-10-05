@@ -11,19 +11,19 @@
 
         describe("Nested suite name", function () {
 
-            it("Second fails first!", function (done) {
+            it("Second fails in async", function (done) {
                 setTimeout(function () {
                     expect(false).to.equal(true);
                     done();
                 }, 1000);
             });
 
-            //it("Third fails too", function () {
-            //    console.log('A log message at start of third');
-            //    expect(1).to.equal(4);
-            //    console.log('After failed 1. Before failed 2');
-            //    expect(2).to.equal(4);
-            //});
+            it("Third fails directly", function () {
+                dump('A log message at start of third');
+                expect(1).to.equal(4);
+                dump('After failed 1. Before failed 2');
+                expect(2).to.equal(4);
+            });
 
         });
     });

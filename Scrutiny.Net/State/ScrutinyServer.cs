@@ -40,6 +40,8 @@ namespace Scrutiny.State
 			client.IsReady = false;
 			client.IsRunRequested = false;
 			client.TotalCount = model.total;
+			client.TestsStartTime = DateTime.Now;
+			client.TestsEndTime = DateTime.MaxValue;
 
 			broadcastClientsList();
 		}
@@ -61,6 +63,7 @@ namespace Scrutiny.State
 		internal void Complete(string id, SocketIORouterModels.CompleteModel model)
 		{
 			var client = FindClient(id);
+			client.TestsEndTime = DateTime.Now;
 			client.IsReady = true;
 
 #warning ScrutinyServer.Complete() not implemented correctly
@@ -71,6 +74,7 @@ namespace Scrutiny.State
 		{
 			var client = FindClient(id);
 			client.IsReady = true;
+			client.TestsEndTime = DateTime.Now;
 
 #warning ScrutinyServer.Error() not implemented correctly
 			System.Diagnostics.Trace.TraceError("Client error: " + arguments["args"]);
