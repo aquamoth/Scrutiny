@@ -13,11 +13,11 @@ namespace Scrutiny.Routers
 			var controller = new Controllers.HomeController();
 			switch (parts.Action)
 			{
-				case "Index":
+				case "index":
 					//TODO: Rewrite as async?
 					return controller.Index();
 
-				case "Run":
+				case "run":
 					return await controller.Run();
 
 				default:

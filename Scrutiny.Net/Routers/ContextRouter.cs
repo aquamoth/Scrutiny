@@ -13,11 +13,13 @@ namespace Scrutiny.Routers
 			var controller = new Controllers.ContextController();
 			switch (parts.Action)
 			{
-				case "Index":
+				case "index":
 					//TODO: Rewrite as async?
 					return controller.Index();
-				case "Debug":
+				case "debug":
 					return controller.Debug();
+				case "tests":
+					return await controller.Tests(parts.Value.Single());
 				default:
 					throw new NotSupportedException();
 			}

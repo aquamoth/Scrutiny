@@ -55,9 +55,7 @@
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="ControllerActionParts.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Models\InfoModel.cs" />
-    <Compile Include="Models\RegisterModel.cs" />
-    <Compile Include="Models\StartModel.cs" />
+    <Compile Include="Models\ContextModels.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.cs" />
@@ -67,8 +65,7 @@
     <Compile Include="Routers\Router.cs" />
     <Compile Include="Routers\IRouter.cs" />
     <Compile Include="Routers\SocketIORouter.cs" />
-    <Compile Include="Models\CompleteModel.cs" />
-    <Compile Include="Models\ResultModel.cs" />
+    <Compile Include="Models\SocketIORouterModels.cs" />
     <Compile Include="State\ScrutinyClient.cs" />
     <Compile Include="State\ScrutinyServer.cs" />
   </ItemGroup>
@@ -109,8 +106,6 @@
     <EmbeddedResource Include="Scripts\karma_commonjs\client\commonjs_bridge.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\fail_fast.js" />
-    <EmbeddedResource Include="Scripts\_fail_fast_test.js" />
     <EmbeddedResource Include="Scripts\karma.js" />
     <EmbeddedResource Include="karma.cfg" />
     <Content Include="Scripts\r.js" />

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model Scrutiny.Models.ContextModels.Index
+<!DOCTYPE html>
 <!--
 This is the execution context.
 Loaded within the iframe.
@@ -15,16 +16,18 @@ Realoaded before every execution run.
          into it. If it is before body, then it fails to find the body and crashes and burns in an epic
          manner. -->
     <script type="text/javascript">
-        // sets window.__karma__ and overrides console and error handling
-        // Use window.opener if this was opened by someone else - in a new window
-        if (window.opener) {
-            window.opener.karma.setupContext(window);
-        } else {
-            window.parent.karma.setupContext(window);
-        }
+    // sets window.__karma__ and overrides console and error handling
+    // Use window.opener if this was opened by someone else - in a new window
+    if (window.opener) {
+        window.opener.karma.setupContext(window);
+    } else {
+        window.parent.karma.setupContext(window);
+    }
 
-        // All served files with the latest timestamps
-        window.__karma__.files = {
+    // All served files with the latest timestamps
+    window.__karma__.files = {
+        @*
+            '@Raw(string.Join("',\n'", Model.Files.ToArray()))'
             //    '/base/node_modules/karma-expect/node_modules/expect.js/index.js': '0e21a2240f31eb72270c443f4eaa97bbca67db8d',
             //    '/base/node_modules/mocha/mocha.js': 'b3453484ccea5be3728f4748f43b3dbd772caca2',
             //    '/base/node_modules/karma-mocha/lib/adapter.js': 'd08bdb9c6b553ed8d3e140fe46529a0e267d63ae',
@@ -44,25 +47,30 @@ Realoaded before every execution run.
             //    '/base/src/client/screen.css': '8274776b1580277b0fac4e44945f470950f2178c',
             //    '/base/src/client/index.html': '9caf52a9ccff84864815a707159930e82ddc5804',
             //    '/base/node_modules/karma-commonjs/client/commonjs_bridge.js': 'a9a9a23ae5f358ea9e5550f6be96f8d5a615e39c'
-        };
-
-
-        window.__cjs_modules_root__ = '';//'C:\\Users\\maas\\Workspace\\Git\\MvcKarmaDemo\\Scrutiny.Net\\Scripts\\';
-        window.__cjs_module__ = window.__cjs_module__ || {};
-        //window.__cjs_module__["C:\\Users\\maas\\Workspace\\Git\\MvcKarmaDemo\\Scrutiny.Net\\Scripts\\require.js"] = function (require, module, exports, __dirname, __filename) {
-        //    debugger;
-        //};
+        *@
+    };
+    
+    window.__cjs_modules_root__ = '';//'C:\\Users\\maas\\Workspace\\Git\\MvcKarmaDemo\\Scrutiny.Net\\Scripts\\';
+    window.__cjs_module__ = window.__cjs_module__ || {};
+    //window.__cjs_module__["C:\\Users\\maas\\Workspace\\Git\\MvcKarmaDemo\\Scrutiny.Net\\Scripts\\require.js"] = function (require, module, exports, __dirname, __filename) {
+    //    debugger;
+    //};
 
 
     </script>
-    <!-- Dynamically replaced with <script> tags -->
-    <script type="text/javascript" src="/Scrutiny/Scripts/expect.js/index.js"></script>
-    <script type="text/javascript" src="/Scrutiny/Scripts/mocha/mocha.js"></script>
-    <script type="text/javascript" src="/Scrutiny/Scripts/karma_mocha/lib/adapter.js"></script>
-    <script type="text/javascript" src="/Scrutiny/Scripts/require.js"></script>
+    <!-- Dynamically "replaced" with <script> tags -->
+    @foreach (var file in Model.Files)
+    {
+        <script type="text/javascript" src="@file"></script>
+    }
+    @*
+        <script type="text/javascript" src="/Scrutiny/Scripts/expect.js/index.js"></script>
+        <script type="text/javascript" src="/Scrutiny/Scripts/mocha/mocha.js"></script>
+        <script type="text/javascript" src="/Scrutiny/Scripts/karma_mocha/lib/adapter.js"></script>
+        <script type="text/javascript" src="/Scrutiny/Scripts/require.js"></script>
 
-    <script type="text/javascript" src="/Scrutiny/Scripts/_fail_fast_test.js"></script>
-
+        <script type="text/javascript" src="/Scrutiny/Scripts/_fail_fast_test.js"></script>
+    *@
     @*<script type="text/javascript" src="/base/src/client/_client_test.js"></script>
         <script type="text/javascript" src="/base/src/client/_css_test.js"></script>
         <script type="text/javascript" src="/base/src/client/_fail_fast_test.js"></script>
@@ -76,8 +84,10 @@ Realoaded before every execution run.
         <script type="text/javascript" src="/base/src/client/vendor/jquery-1.8.3.min.js"></script>
         <script type="text/javascript" src="/base/src/client/vendor/modernizr.custom-2.7.2.min.js"></script>
         <script type="text/javascript" src="/base/src/client/vendor/raphael-2.1.2.min.js"></script>*@
+    @*
 
     <script type="text/javascript" src="/Scrutiny/Scripts/karma_commonjs/client/commonjs_bridge.js"></script>
+    *@
 
     <script type="text/javascript">
         window.__karma__.loaded();

@@ -39,11 +39,11 @@ namespace Scrutiny.Routers
 				//Emitting command
 				switch (message)
 				{
-					case "register": server.Register(id, RegisterModel.From(form)); break;
-					case "start": server.Start(id, StartModel.From(form)); break;
-					case "info": server.Info(id, InfoModel.From(form)); break;
-					case "result": server.Result(id, ResultModel.From(form)); break;
-					case "complete": server.Complete(id, CompleteModel.From(form)); break;
+					case "register": server.Register(id, SocketIORouterModels.RegisterModel.From(form)); break;
+					case "start": server.Start(id, SocketIORouterModels.StartModel.From(form)); break;
+					case "info": server.Info(id, SocketIORouterModels.InfoModel.From(form)); break;
+					case "result": server.Result(id, SocketIORouterModels.ResultModel.From(form)); break;
+					case "complete": server.Complete(id, SocketIORouterModels.CompleteModel.From(form)); break;
 					case "error": server.Error(id, form); break;
 					default:
 						throw new ArgumentException(string.Format("'{0}' is not a valid command", message), "message");

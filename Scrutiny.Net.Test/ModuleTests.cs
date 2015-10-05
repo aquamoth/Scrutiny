@@ -42,7 +42,6 @@ namespace Scrutiny.Net.Test
 			FireHttpApplication_BeginRequest();
 
 
-			var x = 0;
 		}
 
 		//[TestMethod]

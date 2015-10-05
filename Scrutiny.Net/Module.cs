@@ -10,6 +10,7 @@ namespace Scrutiny
 	public class Module : AsyncHttpModule
     {
 		public const string IOSERVER_CACHE_KEY = "WebIO.Net.Server";
+		public const string TEST_FILES_CACHE_KEY = "Scrutiny.Test-files";
 
 		readonly Scrutiny.Routers.Router _router;
 		readonly string _moduleUrl;

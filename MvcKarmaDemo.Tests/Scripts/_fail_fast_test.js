@@ -4,26 +4,26 @@
 
     describe("Hello World Test", function () {
 
-        it("First succeeds", function () {
-            dump("THis is a text dump");
+        it("First test succeeds", function () {
+            dump("This is a text dump");
             expect(true).to.equal(true);
         });
 
         describe("Nested suite name", function () {
 
-            it("Second fails", function (done) {
+            it("Second fails first!", function (done) {
                 setTimeout(function () {
                     expect(false).to.equal(true);
                     done();
                 }, 1000);
             });
 
-            it("Third fails too", function () {
-                console.log('A log message at start of third');
-                expect(1).to.equal(4);
-                console.log('After failed 1. Before failed 2');
-                expect(2).to.equal(4);
-            });
+            //it("Third fails too", function () {
+            //    console.log('A log message at start of third');
+            //    expect(1).to.equal(4);
+            //    console.log('After failed 1. Before failed 2');
+            //    expect(2).to.equal(4);
+            //});
 
         });
     });

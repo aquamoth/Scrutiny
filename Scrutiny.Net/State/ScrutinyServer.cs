@@ -19,7 +19,7 @@ namespace Scrutiny.State
 
 		#region Client emits
 
-		public void Register(string id, RegisterModel model)
+		public void Register(string id, SocketIORouterModels.RegisterModel model)
 		{
 			var client = FindClient(id);
 			if (!string.IsNullOrEmpty(client.Browser))
@@ -34,7 +34,7 @@ namespace Scrutiny.State
 			broadcastClientsList();
 		}
 
-		internal void Start(string id, StartModel model)
+		internal void Start(string id, SocketIORouterModels.StartModel model)
 		{
 			var client = FindClient(id);
 			client.IsReady = false;
@@ -44,12 +44,12 @@ namespace Scrutiny.State
 			broadcastClientsList();
 		}
 
-		internal void Info(string id, InfoModel model)
+		internal void Info(string id, SocketIORouterModels.InfoModel model)
 		{
 #warning ScrutinyServer.Info() not implemented correctly
 		}
 
-		internal void Result(string id, ResultModel model)
+		internal void Result(string id, SocketIORouterModels.ResultModel model)
 		{
 			var client = FindClient(id);
 			foreach (var item in model.Items)
@@ -58,7 +58,7 @@ namespace Scrutiny.State
 			}
 		}
 
-		internal void Complete(string id, CompleteModel model)
+		internal void Complete(string id, SocketIORouterModels.CompleteModel model)
 		{
 			var client = FindClient(id);
 			client.IsReady = true;
@@ -129,7 +129,7 @@ namespace Scrutiny.State
 		private void broadcastClientsList()
 		{
 			var browsers = this.Clients
-				.Select(c => new RegisterResponse { isReady = true, name = c.Browser })
+				.Select(c => new SocketIORouterModels.RegisterResponse { isReady = true, name = c.Browser })
 				.ToArray();
 			this.SendToAll("info", browsers);
 		}
