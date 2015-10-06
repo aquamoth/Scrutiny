@@ -20,8 +20,10 @@ namespace Scrutiny.Routers
 						? 0 
 						: int.Parse(value);
 					return controller.Index(testRun);
+
 				case "tests":
 					return await controller.Tests(parts.Value);
+	
 				default:
 					throw new NotSupportedException();
 			}

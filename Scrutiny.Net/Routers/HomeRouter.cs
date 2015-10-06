@@ -19,7 +19,11 @@ namespace Scrutiny.Routers
 
 				case "debug":
 					//TODO: Rewrite as async?
-					return controller.Debug(parts.Value.SingleOrDefault());
+					var value = parts.Value.SingleOrDefault();
+					var testRun = string.IsNullOrEmpty(value)
+						? 0
+						: int.Parse(value);
+					return controller.Debug(testRun);
 
 				default:
 					throw new NotSupportedException();

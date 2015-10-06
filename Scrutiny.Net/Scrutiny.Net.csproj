@@ -69,7 +69,6 @@
     <Compile Include="Routers\SocketIORouter.cs" />
     <Compile Include="Models\SocketIORouterModels.cs" />
     <Compile Include="Config\Scrutiny.cs" />
-    <Compile Include="Config\Config.cs" />
     <Compile Include="Config\GenericElementCollection.cs" />
     <Compile Include="State\Filesystem.cs" />
     <Compile Include="State\ScrutinyClient.cs" />

@@ -10,8 +10,13 @@ namespace Scrutiny.Controllers
 {
 	class RunController : Controller
 	{
-		internal async Task<string> Index()
+		internal async Task<string> Index(int testRun)
 		{
+			if (testRun != 0)
+			{
+				throw new NotImplementedException("Test groups are not yet supported.");
+			}
+
 			var server = (ScrutinyServer)Context.Cache.Get(Module.IOSERVER_CACHE_KEY);
 
 			Context.Response.Buffer = false;

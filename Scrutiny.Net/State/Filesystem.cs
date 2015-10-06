@@ -21,25 +21,6 @@ namespace Scrutiny.State
 				var directory = DirectoryOf(relativePath);
 				var searchPattern = FilePatternOf(relativePath);
 				var searchOption = SearchOptionsFor(relativePath);
-				//if (relativePath.EndsWith(@"\"))
-				//{
-				//	directoryPart = Path.GetDirectoryName(relativePath);
-				//	filePattern = Path.GetFileName(relativePath);
-				//}
-				//else
-				//{
-				//	directoryPart = Path.GetDirectoryName(relativePath);
-				//	filePattern = Path.GetFileName(relativePath);
-				//}
-				//if (directoryPart.EndsWith(@"\**"))
-				//{
-				//	searchOptions = SearchOption.AllDirectories;
-				//	directoryPart = directoryPart.Substring(0, directoryPart.Length - 3);
-				//}
-				//else
-				//{
-				//	searchOptions = SearchOption.TopDirectoryOnly;
-				//}
 
 				var path = MakeRooted(directory, AssemblyDirectory);
 				var files = Directory.GetFiles(path, searchPattern, searchOption);
@@ -50,6 +31,7 @@ namespace Scrutiny.State
 
 				allUrls.AddRange(urls);
 			}
+
 			return allUrls.ToArray();
 		}
 
