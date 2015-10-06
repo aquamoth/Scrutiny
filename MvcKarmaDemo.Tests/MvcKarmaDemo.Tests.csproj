@@ -87,6 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
+    <EmbeddedResource Include="Scripts\mocha\mocha.js" />
+    <EmbeddedResource Include="Scripts\karma_mocha\lib\adapter.js" />
+    <EmbeddedResource Include="Scripts\karma_commonjs\client\commonjs_bridge.js" />
+    <EmbeddedResource Include="Scripts\expect.js\index.js" />
     <EmbeddedResource Include="Scripts\_fail_fast_test.js" />
   </ItemGroup>
   <ItemGroup>

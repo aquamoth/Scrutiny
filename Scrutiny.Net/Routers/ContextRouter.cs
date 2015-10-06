@@ -15,9 +15,13 @@ namespace Scrutiny.Routers
 			{
 				case "index":
 					//TODO: Rewrite as async?
-					return controller.Index();
+					var value = parts.Value.SingleOrDefault();
+					var testRun = string.IsNullOrEmpty(value) 
+						? 0 
+						: int.Parse(value);
+					return controller.Index(testRun);
 				case "tests":
-					return await controller.Tests(parts.Value.Single());
+					return await controller.Tests(parts.Value);
 				default:
 					throw new NotSupportedException();
 			}

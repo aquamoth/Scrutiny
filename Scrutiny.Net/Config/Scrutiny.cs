@@ -17,27 +17,32 @@ namespace Scrutiny.Config
 			}
 		}
 
-		//[ConfigurationProperty("Tests")]
-		//public GenericElementCollection<StringValueElement> Tests
-		//{
-		//	get { return (GenericElementCollection<StringValueElement>)this["Tests"]; }
-		//}
-
-		//[ConfigurationProperty("Tests")]
-		//public ConfigurationElementCollection Tests
-		[ConfigurationProperty("Tests")]
-		public GenericElementCollection<TestsConfigurationElement> Tests
+		public static IEnumerable<string> PathsForTestrun(int testRun)
 		{
-			get { return (GenericElementCollection<TestsConfigurationElement>)this["Tests"]; }
+			IEnumerable<string> paths;
+			if (testRun == 0)
+			{
+				paths = Section.Paths.Select(p => p.Name);
+			}
+			else
+			{
+				throw new NotImplementedException("Test groups are not yet supported.");
+			}
+			return paths;
 		}
 
 		[ConfigurationProperty("url", DefaultValue = "/Scrutiny")]
 		public string Url { get { return ((string)this["url"]).Trim(); } }
+
+		[ConfigurationProperty("Paths")]
+		public GenericElementCollection<PathConfigurationElement> Paths
+		{
+			get { return (GenericElementCollection<PathConfigurationElement>)this["Paths"]; }
+		}
 	}
 
-	public class TestsConfigurationElement : ConfigurationElement, IGenericConfigurationElement
+	public class PathConfigurationElement : ConfigurationElement, IGenericConfigurationElement
 	{
-
 		[ConfigurationProperty("name")]
 		public string Name
 		{

@@ -1,6 +1,7 @@
 ﻿@model Scrutiny.Models.ContextModels.Index
 @{
-    var allScripts = Model.PreTestFiles.Union(Model.TestFiles).Union(Model.PostTestFiles);
+    //#warning tilde should be handled by RazorEngine when it expands ~, but it isn't
+    var tilde = ViewBag.RootUrl;
 }
 <!DOCTYPE html>
 <!--
@@ -60,9 +61,9 @@ Realoaded before every execution run.
         //};
     </script>
     <!-- Dynamically "replaced" with <script> tags -->
-    @foreach (var url in allScripts)
+    @foreach (var url in Model.TestFiles)
     {
-        <script type="text/javascript" src="@url"></script>
+        <script type="text/javascript" src="@tilde/Context/Tests/@url"></script>
     }
     @*
         <script type="text/javascript" src="/Scrutiny/Scripts/expect.js/index.js"></script>

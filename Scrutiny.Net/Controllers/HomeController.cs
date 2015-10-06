@@ -20,20 +20,22 @@ namespace Scrutiny.Controllers
 		/// This action is virtually the same as ContextController/Index
 		/// </summary>
 		/// <returns></returns>
-		internal string Debug()
+		internal string Debug(string id)
 		{
 			var model = new Models.ContextModels.Index
 			{
-				PreTestFiles = Config.Config.Default.PreTestFiles,
+				//PreTestFiles = Config.Config.Default.PreTestFiles,
 
 				TestFiles = new string[] { 
 					"/Scrutiny/Context/Tests/_fail_fast_test.js", //TODO: Load files according to model
 				},
 
-				PostTestFiles = Config.Config.Default.PostTestFiles
+				//PostTestFiles = Config.Config.Default.PostTestFiles
 			};
 
 			//TODO: Run all plugins to modify the model
+			
+			//TODO: Implement just as in Context/Index
 
 			return View("Debug", model);
 		}

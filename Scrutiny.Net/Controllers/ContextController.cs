@@ -14,22 +14,28 @@ namespace Scrutiny.Controllers
 		/// Also update HomeController/Debug when making changes here
 		/// </summary>
 		/// <returns></returns>
-		public string Index()
+		public string Index(int testRun)
 		{
-			var model = new Models.ContextModels.Index
+			try
 			{
-				PreTestFiles = Config.Config.Default.PreTestFiles,
+				ViewBag.Add("RootUrl", Scrutiny.Config.Scrutiny.Section.Url);
 
-				TestFiles = new string[] { 
-					"/Scrutiny/Context/Tests/_fail_fast_test.js", //TODO: Load files according to model
-				},
+				var paths = Config.Scrutiny.PathsForTestrun(testRun);
+				var model = new Models.ContextModels.Index
+				{
+					TestFiles = Filesystem.ExpandMinimatchUrls(paths)
+									.Select(x => string.Format("{0}/{1}", testRun, x))
+									.ToArray()
+				};
 
-				PostTestFiles = Config.Config.Default.PostTestFiles
-			};
-
-			//TODO: Run all plugins to modify the model
-
-			return View(model);
+				return View(model);
+			}
+			catch (Exception ex)
+			{
+				//C:\Users\maas\Workspace\Git\MvcKarmaDemo\MvcKarmaDemo.Tests\Scripts\TestRunner
+#warning Write exception about dir not found to user
+				throw;
+			}
 		}
 
 		/// <summary>
@@ -37,16 +43,27 @@ namespace Scrutiny.Controllers
 		/// </summary>
 		/// <param name="url">relative url to the file to return content for</param>
 		/// <returns>Content of the file, as a string</returns>
-		public async Task<string> Tests(string url)
+		public async Task<string> Tests(string[] urlParts)
 		{
-			var filename = testsDictionary[url];
-			using (var reader = File.OpenText(filename))
+			var testRun = int.Parse(urlParts[0]);
+			var pathIndex = int.Parse(urlParts[1]);
+			var basePath = Filesystem.DirectoryOf(pathFor(testRun, pathIndex));
+			var subPath = string.Join(@"\", urlParts.Skip(2));
+			var relativePath = Path.Combine(basePath, subPath);
+			var absolutePath = Filesystem.MakeRooted(relativePath, Filesystem.AssemblyDirectory);
+
+			using (var reader = File.OpenText(absolutePath))
 			{
 				var content = await reader.ReadToEndAsync();
 				return content;
 			}
 		}
 
+		private static string pathFor(int testRun, int pathIndex)
+		{
+			var path = Config.Scrutiny.PathsForTestrun(testRun).Skip(pathIndex - 1).First();
+			return path;
+		}
 
 		IDictionary<string, string> testsDictionary
 		{

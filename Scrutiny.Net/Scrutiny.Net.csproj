@@ -71,6 +71,7 @@
     <Compile Include="Config\Scrutiny.cs" />
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\GenericElementCollection.cs" />
+    <Compile Include="State\Filesystem.cs" />
     <Compile Include="State\ScrutinyClient.cs" />
     <Compile Include="State\ScrutinyServer.cs" />
     <Compile Include="Config\StringValueElement.cs" />
@@ -97,18 +98,6 @@
       <Project>{ea2856d4-909f-4190-90de-5dae4507405b}</Project>
       <Name>WebIO.Net</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\karma_mocha\lib\adapter.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\mocha\mocha.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\expect.js\index.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\karma_commonjs\client\commonjs_bridge.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\karma.js" />
