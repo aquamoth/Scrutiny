@@ -1,8 +1,4 @@
 ﻿@model Scrutiny.Models.ContextModels.Index
-@{
-    //#warning tilde should be handled by RazorEngine when it expands ~, but it isn't
-    var tilde = ViewBag.RootUrl;
-}
 <!DOCTYPE html>
 <!--
 This file is almost the same as context.html - loads all source files,
@@ -64,7 +60,8 @@ just for immediate execution, without reporting to Karma server.
     <!-- Dynamically "replaced" with <script> tags -->
     @foreach (var url in Model.Scripts)
     {
-        <script type="text/javascript" src="@tilde/Context/Tests/@url"></script>
+        //TODO: Resolve ~?
+        <script type="text/javascript" src="@url"></script>
     }
 
     <script type="text/javascript">

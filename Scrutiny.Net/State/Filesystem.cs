@@ -9,27 +9,38 @@ namespace Scrutiny.State
 {
 	public class Filesystem
 	{
-		public static string[] ExpandMinimatchUrls(IEnumerable<string> paths)
+		public static string[] ExpandMinimatchUrls(IEnumerable<Config.PathConfigurationElement> paths, string baseUrl)
 		{
 			var allUrls = new List<string>();
 
 			var pathIndex = 0;
-			foreach (string relativePath in paths)
+			foreach (Config.PathConfigurationElement pathElement in paths)
 			{
 				pathIndex++;
 
-				var directory = DirectoryOf(relativePath);
-				var searchPattern = FilePatternOf(relativePath);
-				var searchOption = SearchOptionsFor(relativePath);
+				if (pathElement.Url!=null)
+				{
+					allUrls.Add(pathElement.Url);
+				}
+				else
+				{
+					var relativePath = pathElement.Name;
+					var directory = DirectoryOf(relativePath);
+					var searchPattern = FilePatternOf(relativePath);
+					var searchOption = SearchOptionsFor(relativePath);
 
-				var path = MakeRooted(directory, AssemblyDirectory);
-				var files = Directory.GetFiles(path, searchPattern, searchOption);
-				var urls = files.Select(file => 
-					pathIndex.ToString() 
-						+ file.Substring(path.Length).Replace(@"\", "/")
-					).ToArray();
+					var path = MakeRooted(directory, AssemblyDirectory);
+					var files = Directory.GetFiles(path, searchPattern, searchOption);
 
-				allUrls.AddRange(urls);
+					var urls = files.Select(file => 
+						string.Format("{0}/{1}{2}",
+							baseUrl, 
+							pathIndex, 
+							file.Substring(path.Length).Replace(@"\", "/")
+						)).ToArray();
+
+					allUrls.AddRange(urls);
+				}
 			}
 
 			return allUrls.ToArray();

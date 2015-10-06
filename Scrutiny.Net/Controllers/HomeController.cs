@@ -24,14 +24,11 @@ namespace Scrutiny.Controllers
 		{
 			try
 			{
-				ViewBag.Add("RootUrl", Scrutiny.Config.Scrutiny.Section.Url);
-
+				var baseUrl = string.Format("{0}/Context/Tests/{1}", Config.Scrutiny.Section.Url, testRun);
 				var paths = Config.Scrutiny.PathsForTestrun(testRun);
 				var model = new Models.ContextModels.Index
 				{
-					Scripts = Filesystem.ExpandMinimatchUrls(paths)
-									.Select(x => string.Format("{0}/{1}", testRun, x))
-									.ToArray()
+					Scripts = Filesystem.ExpandMinimatchUrls(paths, baseUrl)
 				};
 
 				return View("Debug", model);

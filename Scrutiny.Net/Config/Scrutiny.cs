@@ -17,18 +17,16 @@ namespace Scrutiny.Config
 			}
 		}
 
-		public static IEnumerable<string> PathsForTestrun(int testRun)
+		public static IEnumerable<PathConfigurationElement> PathsForTestrun(int testRun)
 		{
-			IEnumerable<string> paths;
 			if (testRun == 0)
 			{
-				paths = Section.Paths.Select(p => p.Name);
+				return Section.Paths.Select(p => p);
 			}
 			else
 			{
 				throw new NotImplementedException("Test groups are not yet supported.");
 			}
-			return paths;
 		}
 
 		[ConfigurationProperty("url", DefaultValue = "/Scrutiny")]
@@ -40,23 +38,4 @@ namespace Scrutiny.Config
 			get { return (GenericElementCollection<PathConfigurationElement>)this["Paths"]; }
 		}
 	}
-
-	public class PathConfigurationElement : ConfigurationElement, IGenericConfigurationElement
-	{
-		[ConfigurationProperty("name")]
-		public string Name
-		{
-			get
-			{
-				string value = (string)this["name"];
-				return String.IsNullOrEmpty(value) ? null : value;
-			}
-		}
-
-		object IGenericConfigurationElement.Key
-		{
-			get { return this.Name; }
-		}
-	}
-
 }

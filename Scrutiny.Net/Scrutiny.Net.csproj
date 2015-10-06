@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncModule.cs" />
+    <Compile Include="Config\PathConfigurationElement.cs" />
     <Compile Include="Controllers\ContextController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="ControllerActionParts.cs" />
