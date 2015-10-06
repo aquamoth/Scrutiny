@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scrutiny.State;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,32 +10,26 @@ namespace Scrutiny.Controllers
 {
 	class ContextController : Controller
 	{
+		/// <summary>
+		/// Also update HomeController/Debug when making changes here
+		/// </summary>
+		/// <returns></returns>
 		public string Index()
 		{
 			var model = new Models.ContextModels.Index
 			{
-				PreTestFiles = new string[]{
-					"/Scrutiny/Scripts/expect.js/index.js",
- 					"/Scrutiny/Scripts/mocha/mocha.js",
-					"/Scrutiny/Scripts/karma_mocha/lib/adapter.js",
-					"/Scrutiny/Scripts/require.js"
-				},
+				PreTestFiles = Config.Config.Default.PreTestFiles,
+
 				TestFiles = new string[] { 
 					"/Scrutiny/Context/Tests/_fail_fast_test.js", //TODO: Load files according to model
 				},
-				PostTestFiles = new string[] { 
-					"/Scrutiny/Scripts/karma_commonjs/client/commonjs_bridge.js"
-				}
+
+				PostTestFiles = Config.Config.Default.PostTestFiles
 			};
 
 			//TODO: Run all plugins to modify the model
 
 			return View(model);
-		}
-
-		public string Debug()
-		{
-			return View("Debug");
 		}
 
 		/// <summary>

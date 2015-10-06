@@ -68,8 +68,12 @@
     <Compile Include="Routers\IRouter.cs" />
     <Compile Include="Routers\SocketIORouter.cs" />
     <Compile Include="Models\SocketIORouterModels.cs" />
+    <Compile Include="Config\Scrutiny.cs" />
+    <Compile Include="Config\Config.cs" />
+    <Compile Include="Config\GenericElementCollection.cs" />
     <Compile Include="State\ScrutinyClient.cs" />
     <Compile Include="State\ScrutinyServer.cs" />
+    <Compile Include="Config\StringValueElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

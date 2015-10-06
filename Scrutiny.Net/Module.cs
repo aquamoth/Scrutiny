@@ -17,7 +17,7 @@ namespace Scrutiny
 
 		public Module()
 		{
-			_moduleUrl = ConfigurationManager.AppSettings["Scrutiny:Url"] ?? "/Scrutiny";
+			_moduleUrl = Scrutiny.Config.Scrutiny.Section.Url;
 			_router = new Routers.Router();
 			registerRoutes(_router);
 			registerIOServer();

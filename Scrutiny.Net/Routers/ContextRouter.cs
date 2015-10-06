@@ -16,8 +16,6 @@ namespace Scrutiny.Routers
 				case "index":
 					//TODO: Rewrite as async?
 					return controller.Index();
-				case "debug":
-					return controller.Debug();
 				case "tests":
 					return await controller.Tests(parts.Value.Single());
 				default:

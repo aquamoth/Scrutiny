@@ -12,25 +12,25 @@ namespace Scrutiny.Controllers
 	{
 		internal string Index()
 		{
+			ViewBag.Add("RootUrl", Scrutiny.Config.Scrutiny.Section.Url);
 			return View();
 		}
 
+		/// <summary>
+		/// This action is virtually the same as ContextController/Index
+		/// </summary>
+		/// <returns></returns>
 		internal string Debug()
 		{
 			var model = new Models.ContextModels.Index
 			{
-				PreTestFiles = new string[]{
-					"/Scrutiny/Scripts/expect.js/index.js",
- 					"/Scrutiny/Scripts/mocha/mocha.js",
-					"/Scrutiny/Scripts/karma_mocha/lib/adapter.js",
-					"/Scrutiny/Scripts/require.js"
-				},
+				PreTestFiles = Config.Config.Default.PreTestFiles,
+
 				TestFiles = new string[] { 
 					"/Scrutiny/Context/Tests/_fail_fast_test.js", //TODO: Load files according to model
 				},
-				PostTestFiles = new string[] { 
-					"/Scrutiny/Scripts/karma_commonjs/client/commonjs_bridge.js"
-				}
+
+				PostTestFiles = Config.Config.Default.PostTestFiles
 			};
 
 			//TODO: Run all plugins to modify the model
