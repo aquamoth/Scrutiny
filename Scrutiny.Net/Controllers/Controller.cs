@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Scrutiny.Controllers
 {
-	class Controller
+	public class Controller
 	{
 		public Controller()
 		{
@@ -58,5 +58,13 @@ namespace Scrutiny.Controllers
 
 		#endregion View
 
+		#region Global Web
+
+		public System.Web.HttpContext Context { get { return System.Web.HttpContext.Current; } }
+		//public System.Web.HttpRequest Request { get { return System.Web.HttpContext.Current.Request; } }
+		//public System.Web.HttpResponse Response { get { return System.Web.HttpContext.Current.Response; } }
+
+		#endregion
+	
 	}
 }
