@@ -73,7 +73,6 @@
     <Compile Include="State\Filesystem.cs" />
     <Compile Include="State\ScrutinyClient.cs" />
     <Compile Include="State\ScrutinyServer.cs" />
-    <Compile Include="Config\StringValueElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
