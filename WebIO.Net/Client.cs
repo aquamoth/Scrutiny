@@ -10,9 +10,6 @@ namespace WebIO.Net
 		public string Id { get; set; }
 		public System.Collections.Concurrent.ConcurrentQueue<Command> CommandQueue { get; private set; }
 
-		//Properties below should be Scrutiny-specific!
-		public string Browser { get; set; }
-
 		public Client()
 		{
 			this.CommandQueue = new System.Collections.Concurrent.ConcurrentQueue<Command>();

@@ -6,20 +6,15 @@ using System.Threading.Tasks;
 
 namespace Scrutiny.Routers
 {
-	class HomeRouter : IRouter
+	class RunRouter : IRouter
 	{
 		public async Task<string> Route(ControllerActionParts parts)
 		{
-			var controller = new Controllers.HomeController();
+			var controller = new Controllers.RunController();
 			switch (parts.Action)
 			{
 				case "index":
-					//TODO: Rewrite as async?
-					return controller.Index();
-
-				case "debug":
-					//TODO: Rewrite as async?
-					return controller.Debug();
+					return await controller.Index();
 
 				default:
 					throw new NotSupportedException();

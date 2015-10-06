@@ -10,13 +10,14 @@ namespace Scrutiny
 	public class Module : AsyncHttpModule
     {
 		public const string IOSERVER_CACHE_KEY = "WebIO.Net.Server";
+		public const string TEST_FILES_CACHE_KEY = "Scrutiny.Test-files";
 
 		readonly Scrutiny.Routers.Router _router;
 		readonly string _moduleUrl;
 
 		public Module()
 		{
-			_moduleUrl = ConfigurationManager.AppSettings["Scrutiny:Url"] ?? "/Scrutiny";
+			_moduleUrl = Scrutiny.Config.Scrutiny.Section.Url;
 			_router = new Routers.Router();
 			registerRoutes(_router);
 			registerIOServer();
@@ -26,25 +27,36 @@ namespace Scrutiny
 		{
 			if (context.Request.Path.StartsWith(_moduleUrl, StringComparison.OrdinalIgnoreCase))
 			{
-				var url = urlFrom(context.Request.Path);
-				var result = await _router.Route(url, context.Request.Params);
-				if (result == null)
-					throw new NotSupportedException("Scrutiny.Net does not support the requested path: " + context.Request.Path);
-
-				writeTo(context.Response, result);
+				try
+				{
+					var url = urlFrom(context.Request.Path);
+					var result = await _router.Route(url);
+					if (result == null)
+						throw new NotSupportedException("Scrutiny.Net does not support the requested path: " + context.Request.Path);
+					endResponse(context.Response, result);
+				}
+				catch (Exception ex)
+				{
+					endResponse(context.Response, ex.ToString(), System.Net.HttpStatusCode.InternalServerError);
+				}
 			}
 		}
 
-		private static void writeTo(System.Web.HttpResponse response, string result)
+		private static void endResponse(System.Web.HttpResponse response, string responseText, System.Net.HttpStatusCode statusCode = System.Net.HttpStatusCode.OK)
 		{
-			response.Write(result);
+#warning Unbuffered responses can probably set status code if NO content has been sent yet?!
+			if (response.Buffer)
+				response.StatusCode = (int)statusCode;
+			response.Write(responseText);
 			response.End();
 		}
 
 		private void registerRoutes(Scrutiny.Routers.Router router)
 		{
 			router.Register<Routers.HomeRouter>("home");
-			router.Register<Routers.RpcRouter>("rpc");
+			router.Register<Routers.ContextRouter>("context");
+			router.Register<Routers.RunRouter>("run");
+			router.Register<Routers.SocketIORouter>("socket.io");
 		}
 
 		private void registerIOServer()

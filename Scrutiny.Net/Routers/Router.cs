@@ -17,12 +17,12 @@ namespace Scrutiny.Routers
 			routers.Add(controllerName, new T());
 		}
 
-		public virtual async Task<string> Route(string url, NameValueCollection parameters)
+		public virtual async Task<string> Route(string url)
 		{
 #warning Execute() should return an ActionResult instead, like Mvc.Net does
 			var parts = ControllerActionParts.FromPath(url);
 			var router = selectRouter(parts.Controller);
-			return await router.Route(parts, parameters);
+			return await router.Route(parts);
 		}
 
 		private IRouter selectRouter(string controllerName)

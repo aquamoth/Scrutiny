@@ -22,8 +22,8 @@ namespace Scrutiny
 				path = path.Substring(1);
 			var pathParts = path.Split('/');
 
-			parts.Controller = defaultIfEmpty(pathParts, 0, "Home");
-			parts.Action = defaultIfEmpty(pathParts, 1, "Index");
+			parts.Controller = defaultIfEmpty(pathParts, 0, "Home").ToLowerInvariant();
+			parts.Action = defaultIfEmpty(pathParts, 1, "Index").ToLowerInvariant();
 			parts.Value = pathParts.Skip(2).ToArray();
 
 			return parts;

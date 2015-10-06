@@ -11,11 +11,15 @@ namespace WebIO.Net
 {
 	public class IOServer
 	{
+		public string Connect()
+		{
+			var client = RegisterNewClient();
+			return Json.Encode(new { id = client.Id });
+		}
+
 		public async Task<string> Poll(string id)
 		{
-			var client = string.IsNullOrEmpty(id)
-				? RegisterNewClient()
-				: FindClient(id);
+			var client = FindClient(id);
 
 			var commands = await FlushCommandQueue(client);
 
@@ -36,7 +40,7 @@ namespace WebIO.Net
 			if (!response.IsClientConnected)
 			{
 				DisconnectClient(client);
-				throw new ApplicationException("Client has disconnected!");
+				return new Command[0];
 			}
 
 			var commands = new List<Command>();
@@ -86,7 +90,7 @@ namespace WebIO.Net
 			}
 		}
 
-		public virtual Client FindClient(string id)
+		public Client FindClient(string id)
 		{
 			if (!_clients.ContainsKey(id))
 				throw new ArgumentException("Not a valid connection id!");
@@ -106,8 +110,7 @@ namespace WebIO.Net
 		/// <returns></returns>
 		protected virtual Client CreateClient()
 		{
-			var client = new Client();
-			return client;
+			return new Client();
 		}
 
 		protected virtual void RegisterClientAsLongPollingQuery(Client client)
@@ -151,13 +154,36 @@ namespace WebIO.Net
 
 		#endregion Public Events
 
-		public void SendToAll(string p, string[] browsers)
+		public void SendTo(Client client, string name, object args)
 		{
-			var command = new Command(p, browsers);
+			if (!Clients.Contains(client))
+				throw new ArgumentException("Client is not registered.");
+
+			var command = new Command(name, args);
+			client.CommandQueue.Enqueue(command);
+		}
+
+		public void SendToAll(string name, object args)
+		{
+			var command = new Command(name, args);
 			foreach (var client in Clients)
 			{
 				client.CommandQueue.Enqueue(command);
 			}
 		}
+
+		protected string JsonEncode(object value)
+		{
+			return System.Web.Helpers.Json.Encode(value);
+		}
+		//protected object JsonDecode(string value)
+		//{
+		//	return System.Web.Helpers.Json.Decode(value);
+		//}
+		protected T JsonDecode<T>(string value) where T : class
+		{
+			return System.Web.Helpers.Json.Decode<T>(value);
+		}
+
 	}
 }

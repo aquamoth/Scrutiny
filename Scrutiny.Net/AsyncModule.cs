@@ -17,6 +17,12 @@ namespace Scrutiny
 
 		public void Dispose()
 		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
 		}
 
 		IAsyncResult onBeginRequestBegin(object sender, EventArgs e, AsyncCallback cb, object extraData)

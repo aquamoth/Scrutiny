@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 @{
-    //#warning rootUrl should be handled by RazorEngine when it expands ~, but it isn't
-    var rootUrl = System.Configuration.ConfigurationManager.AppSettings["Scrutiny:Url"] ?? "/Scrutiny";
+    //#warning tilde should be handled by RazorEngine when it expands ~, but it isn't
+    var tilde = ViewBag.RootUrl;
 }
 <!--
 The entry point for client. This file is loaded just once when the client is captured.
@@ -102,7 +102,7 @@ It contains socket.io and all the communication logic.
 </head>
 <body>
     <div id="banner" class="offline">
-        <a href="debug.html" target="_blank" rel="noreferrer" class="btn-debug">DEBUG</a>
+        <a href="@tilde/Home/Debug" target="_blank" rel="noreferrer" class="btn-debug">DEBUG</a>
         <h1 id="title">Scrutiny - starting</h1>
     </div>
 
@@ -110,8 +110,8 @@ It contains socket.io and all the communication logic.
 
     <iframe id="context" src="about:blank" width="100%" height="100%"></iframe>
 
-    <script src="@rootUrl/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="@rootUrl/Scripts/rpc.js"></script>
-    <script src="@rootUrl/Scripts/scrutiny.js"></script>
+    <script src="@tilde/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="@tilde/Scripts/rpc.js"></script>
+    <script src="@tilde/Scripts/karma.js"></script>
 </body>
 </html>
