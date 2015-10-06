@@ -22,10 +22,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrutiny.Net", "Scrutiny.Ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrutiny.Net.Test", "Scrutiny.Net.Test\Scrutiny.Net.Test.csproj", "{5813D1E8-FCF4-4666-81AD-878E35DDF789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpPipelineMockTests", "HttpPipelineMockTests\HttpPipelineMockTests.csproj", "{86E2444C-2F24-4E9D-B2BB-341BA97212B8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpPipelineMock", "HttpPipelineMock\HttpPipelineMock.csproj", "{C91119CC-C6CD-4D4E-86C1-92AC1C0905FE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebIO.Net", "WebIO.Net\WebIO.Net.csproj", "{EA2856D4-909F-4190-90DE-5DAE4507405B}"
 EndProject
 Global
@@ -50,14 +46,6 @@ Global
 		{5813D1E8-FCF4-4666-81AD-878E35DDF789}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5813D1E8-FCF4-4666-81AD-878E35DDF789}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5813D1E8-FCF4-4666-81AD-878E35DDF789}.Release|Any CPU.Build.0 = Release|Any CPU
-		{86E2444C-2F24-4E9D-B2BB-341BA97212B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{86E2444C-2F24-4E9D-B2BB-341BA97212B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{86E2444C-2F24-4E9D-B2BB-341BA97212B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{86E2444C-2F24-4E9D-B2BB-341BA97212B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C91119CC-C6CD-4D4E-86C1-92AC1C0905FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C91119CC-C6CD-4D4E-86C1-92AC1C0905FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C91119CC-C6CD-4D4E-86C1-92AC1C0905FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C91119CC-C6CD-4D4E-86C1-92AC1C0905FE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA2856D4-909F-4190-90DE-5DAE4507405B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA2856D4-909F-4190-90DE-5DAE4507405B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA2856D4-909F-4190-90DE-5DAE4507405B}.Release|Any CPU.ActiveCfg = Release|Any CPU
