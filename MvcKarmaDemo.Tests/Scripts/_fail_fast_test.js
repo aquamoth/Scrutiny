@@ -2,47 +2,52 @@
 (function() {
 	"use strict";
 
-    describe("Hello World Test", function () {
+    //describe("Hello World Test", function () {
 
-        it("First test succeeds", function () {
-            dump("This is a text dump");
-            expect(true).to.equal(true);
-        });
+    //    it("First test succeeds", function () {
+    //        dump("This is a text dump");
+    //        expect(true).to.equal(true);
+    //    });
 
-        describe("Nested suite name", function () {
+    //    describe("Nested suite name", function () {
 
-            it("Second fails in async", function (done) {
-                setTimeout(function () {
-                    expect(false).to.equal(true);
-                    done();
-                }, 1000);
-            });
+    //        it("Second fails in async", function (done) {
+    //            setTimeout(function () {
+    //                expect(false).to.equal(true);
+    //                done();
+    //            }, 1000);
+    //        });
 
-            it("Third fails directly", function () {
-                dump('A log message at start of third');
-                expect(1).to.equal(4);
-                dump('After failed 1. Before failed 2');
-                expect(2).to.equal(4);
-            });
+    //        it("Third fails directly", function () {
+    //            dump('A log message at start of third');
+    //            expect(1).to.equal(4);
+    //            dump('After failed 1. Before failed 2');
+    //            expect(2).to.equal(4);
+    //        });
 
-        });
-    });
+    //    });
+    //});
 
-    //var failFast = require("./fail_fast.js");
-	//var FailFastException = failFast.FailFastException;
 
-	//describe("Fail Fast module", function() {
 
-	//	it("uses custom exception", function() {
-	//		try {
-	//			throw new FailFastException("foo");
-	//		}
-	//		catch (e) {
-	//			expect(e.name).to.equal("FailFastException");
-	//			expect(e.constructor).to.equal(FailFastException);
-	//			expect("" + e).to.equal("FailFastException");
-	//		}
-	//	});
+
+
+	debugger;
+    var failFast = require("./fail_fast.js");
+	var FailFastException = failFast.FailFastException;
+
+	describe("Fail Fast module", function() {
+
+		it("uses custom exception", function() {
+			try {
+				throw new FailFastException("foo");
+			}
+			catch (e) {
+				expect(e.name).to.equal("FailFastException");
+				expect(e.constructor).to.equal(FailFastException);
+				expect("" + e).to.equal("FailFastException");
+			}
+		});
 
 	//	it("checks if variable is defined", function() {
 	//		expect(unlessDefined("foo")).to.not.throwException();
@@ -81,6 +86,6 @@
 	//			};
 	//		}
 	//	});
-	//});
+	});
 
 }());

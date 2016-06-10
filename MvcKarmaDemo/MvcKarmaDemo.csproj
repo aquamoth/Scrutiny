@@ -203,6 +203,7 @@
     <None Include="Properties\PublishProfiles\MvcKarmaDemo.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <EmbeddedResource Include="Scripts\fail_fast.js" />
+    <Content Include="Scripts\generated\bundle.js" />
     <Content Include="Scripts\jasmine-samples\Player.js" />
     <Content Include="Scripts\jasmine-samples\PlayerSpec.js" />
     <Content Include="Scripts\jasmine-samples\Song.js" />
