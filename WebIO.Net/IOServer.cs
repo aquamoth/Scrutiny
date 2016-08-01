@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Helpers;
 
 namespace WebIO.Net
 {
@@ -14,8 +13,8 @@ namespace WebIO.Net
 		public string Connect()
 		{
 			var client = RegisterNewClient();
-			return Json.Encode(new { id = client.Id });
-		}
+            return JsonEncode(new { id = client.Id });
+        }
 
 		public async Task<string> Poll(string id)
 		{
@@ -24,9 +23,9 @@ namespace WebIO.Net
 			var commands = await FlushCommandQueue(client);
 
 			if (commands.Any())
-				return Json.Encode(new { id = client.Id, commands = commands });
+				return JsonEncode(new { id = client.Id, commands = commands });
 			else
-				return Json.Encode(new { id = client.Id });
+				return JsonEncode(new { id = client.Id });
 		}
 
 		protected virtual async Task<Command[]> FlushCommandQueue(Client client)
@@ -174,16 +173,15 @@ namespace WebIO.Net
 
 		protected string JsonEncode(object value)
 		{
-			return System.Web.Helpers.Json.Encode(value);
-		}
-		//protected object JsonDecode(string value)
-		//{
-		//	return System.Web.Helpers.Json.Decode(value);
-		//}
-		protected T JsonDecode<T>(string value) where T : class
-		{
-			return System.Web.Helpers.Json.Decode<T>(value);
+            var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            return serializer.Serialize(value);
 		}
 
-	}
+        protected T JsonDecode<T>(string value) where T : class
+        {
+            var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            return serializer.Deserialize<T>(value);
+        }
+
+    }
 }
