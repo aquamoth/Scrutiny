@@ -25,10 +25,12 @@ namespace Scrutiny.Controllers
 			try
 			{
 				var baseUrl = string.Format("{0}/Context/Tests/{1}", Config.Scrutiny.Section.Url, testRun);
-				var paths = Config.Scrutiny.PathsForTestrun(testRun);
-				var model = new Models.ContextModels.Index
+                var stylesheets = Config.Scrutiny.StylesheetsForTestrun(testRun);
+                var scripts = Config.Scrutiny.ScriptsForTestrun(testRun);
+                var model = new Models.ContextModels.Index
 				{
-					Scripts = Filesystem.ExpandMinimatchUrls(paths, baseUrl)
+                    Stylesheets = Filesystem.ExpandMinimatchUrls(stylesheets, baseUrl),
+                    Scripts = Filesystem.ExpandMinimatchUrls(scripts, baseUrl)
 				};
 
 				return View("Debug", model);

@@ -17,7 +17,7 @@ namespace Scrutiny.Config
 			}
 		}
 
-		public static IEnumerable<PathConfigurationElement> PathsForTestrun(int testRun)
+		public static IEnumerable<PathConfigurationElement> ScriptsForTestrun(int testRun)
 		{
 			if (testRun == 0)
 			{
@@ -29,7 +29,19 @@ namespace Scrutiny.Config
 			}
 		}
 
-		[ConfigurationProperty("url", DefaultValue = "/Scrutiny")]
+        public static IEnumerable<PathConfigurationElement> StylesheetsForTestrun(int testRun)
+        {
+            if (testRun == 0)
+            {
+                return Section.Stylesheets.Select(p => p);
+            }
+            else
+            {
+                throw new NotImplementedException("Test groups are not yet supported.");
+            }
+        }
+
+        [ConfigurationProperty("url", DefaultValue = "/Scrutiny")]
 		public string Url { get { return ((string)this["url"]).Trim(); } }
 
 		[ConfigurationProperty("Paths")]
@@ -37,5 +49,11 @@ namespace Scrutiny.Config
 		{
 			get { return (GenericElementCollection<PathConfigurationElement>)this["Paths"]; }
 		}
-	}
+
+        [ConfigurationProperty("Stylesheets")]
+        public GenericElementCollection<PathConfigurationElement> Stylesheets
+        {
+            get { return (GenericElementCollection<PathConfigurationElement>)this["Stylesheets"]; }
+        }
+    }
 }

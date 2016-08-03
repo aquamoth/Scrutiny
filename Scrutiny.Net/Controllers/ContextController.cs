@@ -19,10 +19,12 @@ namespace Scrutiny.Controllers
 			try
 			{
 				var baseUrl = string.Format("{0}/Context/Tests/{1}", Config.Scrutiny.Section.Url, testRun);
-				var paths = Config.Scrutiny.PathsForTestrun(testRun);
-				var model = new Models.ContextModels.Index
+                var stylesheets = Config.Scrutiny.StylesheetsForTestrun(testRun);
+                var scripts = Config.Scrutiny.ScriptsForTestrun(testRun);
+                var model = new Models.ContextModels.Index
 				{
-					Scripts = Filesystem.ExpandMinimatchUrls(paths, baseUrl)
+                    Stylesheets = Filesystem.ExpandMinimatchUrls(stylesheets, baseUrl),
+                    Scripts = Filesystem.ExpandMinimatchUrls(scripts, baseUrl)
 				};
 
 				return View(model);
@@ -45,8 +47,8 @@ namespace Scrutiny.Controllers
 			var pathIndex = int.Parse(urlParts[1]);
 			var subPath = string.Join(@"\", urlParts.Skip(2));
 
-			var pathInConfig = Config.Scrutiny.PathsForTestrun(testRun).Skip(pathIndex - 1).First();
-			var basePath = Filesystem.DirectoryOf(pathInConfig.Name);
+			var scriptsInConfig = Config.Scrutiny.ScriptsForTestrun(testRun).Skip(pathIndex - 1).First();
+			var basePath = Filesystem.DirectoryOf(scriptsInConfig.Name);
 			var relativePath = Path.Combine(basePath, subPath);
 			var absolutePath = Filesystem.MakeRooted(relativePath, Filesystem.AssemblyDirectory);
 

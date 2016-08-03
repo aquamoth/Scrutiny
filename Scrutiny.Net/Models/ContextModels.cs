@@ -10,7 +10,8 @@ namespace Scrutiny.Models
 	{
 		public class Index
 		{
-			public IEnumerable<string> Scripts { get; set; }
-		}
-	}
+            public IEnumerable<string> Stylesheets { get; set; }
+            public IEnumerable<string> Scripts { get; set; }
+        }
+    }
 }

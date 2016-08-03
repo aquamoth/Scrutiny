@@ -2,12 +2,12 @@
 (function() {
 	"use strict";
 
-    //describe("Hello World Test", function () {
+    describe("Hello World Test", function () {
 
-    //    it("First test succeeds", function () {
-    //        dump("This is a text dump");
-    //        expect(true).to.equal(true);
-    //    });
+        it("First test succeeds", function () {
+            dump("This is a text dump");
+            expect(false).to.equal(true);
+        });
 
     //    describe("Nested suite name", function () {
 
@@ -26,28 +26,28 @@
     //        });
 
     //    });
-    //});
+    });
 
 
 
 
 
-	debugger;
-    var failFast = require("./fail_fast.js");
-	var FailFastException = failFast.FailFastException;
+	//debugger;
+    //var failFast = require("./fail_fast.js");
+	//var FailFastException = failFast.FailFastException;
 
-	describe("Fail Fast module", function() {
+	//describe("Fail Fast module", function() {
 
-		it("uses custom exception", function() {
-			try {
-				throw new FailFastException("foo");
-			}
-			catch (e) {
-				expect(e.name).to.equal("FailFastException");
-				expect(e.constructor).to.equal(FailFastException);
-				expect("" + e).to.equal("FailFastException");
-			}
-		});
+	//	it("uses custom exception", function() {
+	//		try {
+	//			throw new FailFastException("foo");
+	//		}
+	//		catch (e) {
+	//			expect(e.name).to.equal("FailFastException");
+	//			expect(e.constructor).to.equal(FailFastException);
+	//			expect("" + e).to.equal("FailFastException");
+	//		}
+	//	});
 
 	//	it("checks if variable is defined", function() {
 	//		expect(unlessDefined("foo")).to.not.throwException();
@@ -86,6 +86,6 @@
 	//			};
 	//		}
 	//	});
-	});
+	//});
 
 }());
