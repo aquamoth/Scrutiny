@@ -27,10 +27,12 @@ namespace Scrutiny.State
 		public DateTime	TestsStartTime { get; set; }
 		public DateTime TestsEndTime { get; set; }
 		public ObservableCollection<TestResult> Results { get; private set; }
+        public ObservableCollection<string> Dumps { get; set; }
 
-		public ScrutinyTestClient()
+        public ScrutinyTestClient()
 		{
-			this.Results = new ObservableCollection<TestResult>();
+            this.Dumps = new ObservableCollection<string>();
+            this.Results = new ObservableCollection<TestResult>();
 		}
 	}
 }

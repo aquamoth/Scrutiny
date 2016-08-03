@@ -33,39 +33,12 @@ namespace Scrutiny.Controllers
 			var messageQueue = new ConcurrentQueue<string>();
 			foreach (var client in server.Clients)
 			{
-				var collection = client.Results as System.Collections.ObjectModel.ObservableCollection<TestResult>;
-				collection.CollectionChanged += (s, e) =>
-				{
-					if (e.NewItems != null)
-					{
-						foreach (TestResult item in e.NewItems)
-						{
-							if (!item.success)
-							{
-								var message = new StringBuilder();
-
-								string template;
-								template = "<p class='error'><span class='browser'>{0}</span> <span class='description'>{1}</span></p>\n";
-								message.AppendFormat(template, client.Browser, item.description);
-
-								if (item.log.Length > 0)
-								{
-									template = "<pre class='log'>{0}</pre>\n";
-									foreach (var logRow in item.log)
-									{
-										message.AppendFormat(template, logRow);
-									}
-								}
-
-								messageQueue.Enqueue(message.ToString());
-							}
-						}
-					}
-				};
-			}
+                client.Dumps.CollectionChanged += (s, e) => OnDumpsAdded(e, messageQueue, client);
+                client.Results.CollectionChanged += (s, e) => OnResultsAdded(e, messageQueue, client);
+            }
 
 
-			var isStarted = server.Execute();
+            var isStarted = server.Execute();
 			if (!isStarted)
 			{
 				throw new ApplicationException("Failed to start! Is another test run already in progress?");
@@ -104,5 +77,49 @@ namespace Scrutiny.Controllers
 
 			return "";
 		}
-	}
+
+        private static void OnDumpsAdded(System.Collections.Specialized.NotifyCollectionChangedEventArgs e, ConcurrentQueue<string> messageQueue, ScrutinyTestClient client)
+        {
+            if (e.NewItems == null)
+                return;
+
+            foreach (string dump in e.NewItems)
+            {
+                OnDumpAdded(messageQueue, client, dump);
+            }
+        }
+
+        private static void OnDumpAdded(ConcurrentQueue<string> messageQueue, ScrutinyTestClient client, string dump)
+        {
+            messageQueue.Enqueue($"<p class='info'><span class='browser'>{client.Browser}</span> <span class='description'>{dump}</span></p>\n");
+        }
+
+        private static void OnResultsAdded(System.Collections.Specialized.NotifyCollectionChangedEventArgs e, ConcurrentQueue<string> messageQueue, ScrutinyTestClient client)
+        {
+            if (e.NewItems == null)
+                return;
+
+            foreach (TestResult item in e.NewItems)
+            {
+                OnResultAdded(messageQueue, client, item);
+            }
+        }
+
+        private static void OnResultAdded(ConcurrentQueue<string> messageQueue, ScrutinyTestClient client, TestResult item)
+        {
+            if (item.success)
+                return; //Suppressing all success messages
+
+            var message = new StringBuilder();
+
+            message.AppendLine($"<p class='error'><span class='browser'>{client.Browser}</span> <span class='description'>{item.description}</span></p>");
+
+            foreach (var logRow in item.log)
+            {
+                message.AppendLine($"<pre class='log'>{logRow}</pre>");
+            }
+
+            messageQueue.Enqueue(message.ToString());
+        }
+    }
 }

@@ -48,10 +48,11 @@ namespace Scrutiny.State
 
 		internal void Info(string id, SocketIORouterModels.InfoModel model)
 		{
-#warning ScrutinyServer.Info() not implemented correctly
-		}
+            var client = FindClient(id);
+            client.Dumps.Add(model.Log);
+        }
 
-		internal void Result(string id, SocketIORouterModels.ResultModel model)
+        internal void Result(string id, SocketIORouterModels.ResultModel model)
 		{
 			var client = FindClient(id);
 			foreach (var item in model.Items)
@@ -67,7 +68,8 @@ namespace Scrutiny.State
 			client.IsReady = true;
 
 #warning ScrutinyServer.Complete() not implemented correctly
-			broadcastClientsList();
+            System.Diagnostics.Trace.TraceWarning("Complete: Coverage " + model.coverage);
+            broadcastClientsList();
 		}
 
 		internal void Error(string id, NameValueCollection arguments)

@@ -54,11 +54,15 @@ namespace Scrutiny.Models
 
 			public static InfoModel From(System.Collections.Specialized.NameValueCollection form)
 			{
-				return new InfoModel
-				{
-					Log = form["args[Log]"],
-					type = form["args[type]"]
-				};
+                var log = form["args[Log]"];
+                if (!log.StartsWith("'") && log.EndsWith("'"))
+                    throw new ArgumentException("Expected Log argument to start and end with '.");
+
+                return new InfoModel
+                {
+                    Log = log.Substring(1, log.Length - 2),
+                    type = form["args[type]"]
+                };
 			}
 		}
 
