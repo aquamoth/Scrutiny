@@ -50,12 +50,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncModule.cs" />
+    <Compile Include="Config\ClientConfigElement.cs" />
+    <Compile Include="Config\NameConfigurationElement.cs" />
     <Compile Include="Config\PathConfigurationElement.cs" />
     <Compile Include="Controllers\ContextController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="ControllerActionParts.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RunController.cs" />
+    <Compile Include="Models\ClientConfiguration.cs" />
     <Compile Include="Models\ContextModels.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

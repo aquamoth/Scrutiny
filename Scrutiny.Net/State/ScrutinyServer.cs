@@ -64,22 +64,25 @@ namespace Scrutiny.State
 		internal void Complete(string id, SocketIORouterModels.CompleteModel model)
 		{
 			var client = FindClient(id);
-			client.TestsEndTime = DateTime.Now;
-			client.IsReady = true;
 
 #warning ScrutinyServer.Complete() not implemented correctly
             System.Diagnostics.Trace.TraceWarning("Complete: Coverage " + model.coverage);
+
+            client.TestsEndTime = DateTime.Now;
+			client.IsReady = true;
+
             broadcastClientsList();
 		}
 
 		internal void Error(string id, NameValueCollection arguments)
 		{
 			var client = FindClient(id);
-			client.IsReady = true;
-			client.TestsEndTime = DateTime.Now;
 
 #warning ScrutinyServer.Error() not implemented correctly
-			System.Diagnostics.Trace.TraceError("Client error: " + arguments["args"]);
+            client.Dumps.Add($"{arguments["message"]}: {arguments["args"]}");
+
+            client.TestsEndTime = DateTime.Now;
+            client.IsReady = true;
 
 			broadcastClientsList();
 		}
@@ -88,17 +91,11 @@ namespace Scrutiny.State
 
 		#region Server commands
 
-		internal bool Execute(/* cfg? */)
+
+		internal bool Execute(ClientConfiguration cfg)
 		{
 			if (this.Clients.Any(x => x.IsRunRequested || !x.IsReady))
 				return false;
-
-			var cfg = new
-			{
-				frameworks = new[] { "mocha", "commonjs", "expect" },
-				preprocessors = new string[] { },
-				reporters = new[] { "dots" },
-			};
 
 			foreach (var client in this.Clients)
 			{

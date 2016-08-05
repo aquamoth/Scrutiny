@@ -44,6 +44,12 @@ namespace Scrutiny.Config
         [ConfigurationProperty("url", DefaultValue = "/Scrutiny")]
 		public string Url { get { return ((string)this["url"]).Trim(); } }
 
+        [ConfigurationProperty("ClientConfig")]
+        public ClientConfigElement ClientConfig
+        {
+            get { return ((ClientConfigElement)this["ClientConfig"]); }
+        }
+
 		[ConfigurationProperty("Paths")]
 		public GenericElementCollection<PathConfigurationElement> Paths
 		{
