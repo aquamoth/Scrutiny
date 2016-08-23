@@ -8,7 +8,7 @@ namespace Scrutiny.Routers
 {
 	class ContextRouter : IRouter
 	{
-		public async Task<string> Route(ControllerActionParts parts)
+		public async Task<string> Route(ControllerActionParts parts, Net.Api.RequestType requestType)
 		{
 			var controller = new Controllers.ContextController();
 			switch (parts.Action)

@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="WebApi\ImageFolderController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -103,7 +104,12 @@
       <Project>{9F070F0F-1A94-4DFA-A70B-DBAFEEF81461}</Project>
       <Name>MvcKarmaDemo</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Scrutiny.Net.Api\Scrutiny.Net.Api.csproj">
+      <Project>{ee5d47da-42b2-4fad-afed-ff9703aa63a6}</Project>
+      <Name>Scrutiny.Net.Api</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

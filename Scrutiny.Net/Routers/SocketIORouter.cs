@@ -11,7 +11,7 @@ namespace Scrutiny.Routers
 {
 	class SocketIORouter : IRouter
 	{
-		public async Task<string> Route(ControllerActionParts parts)
+		public async Task<string> Route(ControllerActionParts parts, Net.Api.RequestType requestType)
 		{
 			var context = System.Web.HttpContext.Current;
 			var server = (ScrutinyServer)context.Cache.Get(Module.IOSERVER_CACHE_KEY);

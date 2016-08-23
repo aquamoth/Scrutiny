@@ -9,6 +9,6 @@ namespace Scrutiny.Routers
 {
 	public interface IRouter
 	{
-		Task<string> Route(ControllerActionParts parts);
+		Task<string> Route(ControllerActionParts parts, Net.Api.RequestType requestType);
 	}
 }

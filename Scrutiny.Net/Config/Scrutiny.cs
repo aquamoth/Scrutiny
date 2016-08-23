@@ -17,6 +17,11 @@ namespace Scrutiny.Config
 			}
 		}
 
+        public static IEnumerable<PathConfigurationElement> AssembliesToSearchForApisIn()
+        {
+            return Section.ApiAssemblies.Select(a => a);
+        }
+
 		public static IEnumerable<PathConfigurationElement> ScriptsForTestrun(int testRun)
 		{
 			if (testRun == 0)
@@ -50,7 +55,13 @@ namespace Scrutiny.Config
             get { return ((ClientConfigElement)this["ClientConfig"]); }
         }
 
-		[ConfigurationProperty("Paths")]
+        [ConfigurationProperty("ApiAssemblies")]
+        public GenericElementCollection<PathConfigurationElement> ApiAssemblies
+        {
+            get { return (GenericElementCollection<PathConfigurationElement>)this["ApiAssemblies"]; }
+        }
+
+        [ConfigurationProperty("Paths")]
 		public GenericElementCollection<PathConfigurationElement> Paths
 		{
 			get { return (GenericElementCollection<PathConfigurationElement>)this["Paths"]; }

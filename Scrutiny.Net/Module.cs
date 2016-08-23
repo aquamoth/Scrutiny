@@ -29,8 +29,9 @@ namespace Scrutiny
 			{
 				try
 				{
+                    var requestType = (Net.Api.RequestType)Enum.Parse(typeof(Net.Api.RequestType), context.Request.RequestType);
 					var url = urlFrom(context.Request.Path);
-					var result = await _router.Route(url);
+					var result = await _router.Route(url, requestType);
 					if (result == null)
 						throw new NotSupportedException("Scrutiny.Net does not support the requested path: " + context.Request.Path);
 					endResponse(context.Response, result);
@@ -55,8 +56,9 @@ namespace Scrutiny
 		{
 			router.Register<Routers.HomeRouter>("home");
 			router.Register<Routers.ContextRouter>("context");
-			router.Register<Routers.RunRouter>("run");
-			router.Register<Routers.SocketIORouter>("socket.io");
+            router.Register<Routers.RunRouter>("run");
+            router.Register<Routers.ApiRouter>("api");
+            router.Register<Routers.SocketIORouter>("socket.io");
 		}
 
 		private void registerIOServer()
