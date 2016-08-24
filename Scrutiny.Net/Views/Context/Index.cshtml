@@ -58,6 +58,9 @@ Reloaded before every execution run.
         //window.__cjs_module__["C:\\Users\\mattias\\Source\\Repos\\Scrutiny\\Scrutiny.Net\\Scripts\\require.js"] = function (require, module, exports, __dirname, __filename) {
 		//	debugger;
         //};
+
+        window.__SCRUTINY = window.__SCRUTINY || {};
+        window.__SCRUTINY.API_BASEURL = '@Model.Scrutiny_Api_BaseUrl';
     </script>
     <!-- Dynamically "replaced" with <script> tags -->
     @foreach (var url in Model.Scripts)

@@ -84,11 +84,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
-    <Compile Include="WebApi\ImageFolderController.cs" />
+    <Compile Include="WebApi\ApiTestController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
-    <None Include="Scripts\subfolder\_folder-test_test.js" />
+    <None Include="Scripts\subfolder\_api_test_test.js" />
     <None Include="Scripts\require.js\require.js" />
     <None Include="Scripts\mocha\mocha.js" />
     <None Include="Scripts\karma_mocha\lib\adapter.js" />

@@ -29,6 +29,7 @@ namespace Scrutiny.Controllers
                 var scripts = Config.Scrutiny.ScriptsForTestrun(testRun);
                 var model = new Models.ContextModels.Index
 				{
+                    Scrutiny_Api_BaseUrl = string.Format("{0}/api/", Config.Scrutiny.Section.Url),
                     Stylesheets = Filesystem.ExpandMinimatchUrls(stylesheets, baseUrl),
                     Scripts = Filesystem.ExpandMinimatchUrls(scripts, baseUrl)
 				};

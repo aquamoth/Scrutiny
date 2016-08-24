@@ -10,6 +10,7 @@ namespace Scrutiny.Models
 	{
 		public class Index
 		{
+            public string Scrutiny_Api_BaseUrl { get; set; }
             public IEnumerable<string> Stylesheets { get; set; }
             public IEnumerable<string> Scripts { get; set; }
         }

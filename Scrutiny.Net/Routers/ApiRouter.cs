@@ -11,15 +11,8 @@ namespace Scrutiny.Routers
 	{
         const string DEFAULT_CONTROLLER_NAME_ENDING = "Controller";
 
-        static IDictionary<string, Type> controllersMap;
 
         #region Static Constructor
-
-        static ApiRouter()
-        {
-            var apiControllers = loadApiControllersFromConfig();
-            controllersMap = createCaseInsensitiveDictionaryOf(apiControllers);
-        }
 
         private static List<Type> loadApiControllersFromConfig()
         {
@@ -85,6 +78,9 @@ namespace Scrutiny.Routers
 
         public async Task<string> Route(ControllerActionParts parts, Net.Api.RequestType requestType)
         {
+            var apiControllers = loadApiControllersFromConfig();
+            var controllersMap = createCaseInsensitiveDictionaryOf(apiControllers);
+
             var controllerType = controllersMap[parts.Action];
             var response = callMethod(controllerType, requestType.ToString(), parts.Value);
 
